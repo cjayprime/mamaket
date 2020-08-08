@@ -15,5 +15,7 @@
 .ladyInYellow {
     position: absolute;
     top: 35%;
-    left: 10%;
+    left: 5%;
+    margin-left: auto;
+    margin-right: auto;
 }

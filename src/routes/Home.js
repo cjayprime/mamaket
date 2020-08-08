@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { Paper, Grid, Box, InputBase, IconButton, Container, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
+import { Paper, Grid, Box, InputBase, IconButton, Container, GridList, GridListTile, GridListTileBar, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Cake, ChevronRight, Search, Room } from '@material-ui/icons';
 
-import Header from '../components/Header';
+import { Header, Footer } from '../components';
+
 
 import ladyInYellow from '../assets/images/home/ladyInYellow.png';
 import guyOnYellowBackground from '../assets/images/home/guyOnYellowBackground.png';
 import twoGuysOnWhiteBackground from '../assets/images/home/twoGuysOnWhiteBackground.png';
 import appStore from '../assets/images/home/appStore.png';
-import footer from '../assets/images/logo/footer.png';
 import meatAndPoultry from '../assets/images/category/meatAndPoultry.png';
 import drink from '../assets/images/category/drink.png';
 import frozenChicken from '../assets/images/category/frozenChicken.png';
@@ -35,7 +35,6 @@ const useInputStyles = makeStyles(() => ({
     alignItems: 'content',
     backgroundColor: '#FFF',
     marginLeft: 0,
-    width: '35%',
     height: 50,
     padding: 20,
     paddingLeft: 5,
@@ -97,14 +96,17 @@ const products = [
 ];
 
 const Home = () => {
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
+  const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
   const paperClasses = usePaperStyles();
   const inputClasses = useInputStyles();
   const gridListTileBarClasses = useGridListTileBarStyles();
   
   useEffect(() => {
-    // document.scrollingElement.scrollTop = 0.45 * document.scrollingElement.scrollHeight
+    console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
+    // document.scrollingElement.scrollTop = 1 * document.scrollingElement.scrollHeight
   });
-
   return (
     <>
       <Header />
@@ -114,23 +116,23 @@ const Home = () => {
           <Box display="flex" justifyContent="center" alignItems="center" style={{backgroundColor: "#FFF", color: '#2DC7FF', width: 10, height: 50, borderRadius: '7px 0 0 7px', paddingLeft: 30, fontSize: 20}}>
             <span style={{marginTop: -3}}>#</span>
           </Box>
-          <InputBase classes={inputClasses} placeholder="What do you want to buy?" />
+          <InputBase classes={inputClasses} placeholder="What do you want to buy?" style={{width: matchesXS ? '50%' : '35%'}} />
           <IconButton style={{color: '#FFF', backgroundColor: '#2DC7FF', width: 55, height: 50, borderRadius: '0 7px 7px 0', padding: 20}}>
             <Search/>
           </IconButton>
         </Box>
       </Paper>
 
-      <Container maxWidth="lg">
+      <div style={{width: matchesMD ? '95%' : '100%', marginLeft: matchesMD ? '2.5%' : 0, overflow: 'hidden'}}>
         <Grid container spacing={0}>
-          <Grid item xs={3} style={{height: 300, width: 'auto', backgroundColor: '#FEB300', backgroundPosition: '60% -60%', overflow: 'hidden', backgroundImage: "url('" + guyOnYellowBackground + "')"}}>
-            <div style={{width: 90, float: 'right', fontSize: 30, fontFamily: 'BebasNeue', marginRight: '15%', lineHeight: '25px', color: '#F8F8F8', marginTop: 30}}>
+          <Grid item xs={12} sm={12} md={3} style={{height: 300, width: '100%', backgroundColor: '#FEB300', backgroundPosition: '-10px 5px', overflow: 'hidden', backgroundImage: "url('" + guyOnYellowBackground + "')", backgroundRepeat: 'no-repeat' }}>
+            <div style={{width: 90, float: 'right', fontSize: 30, fontFamily: 'BebasNeue', marginRight: '12.5%', lineHeight: '25px', color: '#F8F8F8', marginTop: 30}}>
               BECOME A SELLER
               <br/>
               <div style={{width: 155, fontSize: 13, fontFamily: 'Quicksand', lineHeight: '15px', color: '#F8F8F8'}}>Sell anything, anytime, anyday</div>
             </div>
           </Grid>
-          <Grid item xs={9} style={{height: 300, width: 'auto', backgroundColor: '#F1EAE0', overflow: 'hidden', backgroundImage: "url('" + twoGuysOnWhiteBackground + "')", backgroundPosition: '30% 5px'}}>
+          <Grid item xs={12} sm={12} md={9} style={{height: 300, width: 'auto', backgroundColor: '#E3DCD6', overflow: 'hidden', backgroundImage: "url('" + twoGuysOnWhiteBackground + "')", backgroundPosition: '30% 5px', backgroundRepeat: 'no-repeat'}}>
             <div style={{fontSize: 50, fontFamily: 'BebasNeue', color: '#AFA294', width: 200, lineHeight: '45px', marginTop: 60, marginLeft: 50}}>SHOPPING MADE EASY</div>
             <div style={{fontSize: 20, fontFamily: 'Quicksand', color: '#AFA294', width: 250, marginTop: 0, marginLeft: 50}}>Make orders from your convenience</div>
           </Grid>
@@ -138,7 +140,7 @@ const Home = () => {
 
 
         <Grid container spacing={0}>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={12} md={3}>
             <Grid item xs={12} style={{backgroundColor: '#0177B6', height: 70, padding: 20, color: '#FFFFFF', textAlign: 'center', fontSize: 20}}>
               All Categories
             </Grid>
@@ -167,11 +169,11 @@ const Home = () => {
             </Paper>
           </Grid>
 
-          <Grid item xs={9}>
-            <Grid item xs={12} style={{height: 50, padding: 10, fontSize: 20, color: '#BBBCC1'}}>
+          <Grid item xs={12} sm={12} md={9}>
+            <Grid item xs={12} style={{height: 50, paddingTop: 10, paddingBottom: 10, fontSize: 20, color: '#BBBCC1'}}>
               Product Categories
             </Grid>
-            <GridList cols={4} spacing={10}>
+            <GridList cols={matchesMD ? 4 : 2} spacing={10}>
               {
                 categories.map((props, i) => (
                   <GridListTile key={i} cols={1} style={{height: 300}}>
@@ -188,60 +190,26 @@ const Home = () => {
         <Grid container style={{margin: 10, marginTop: 30, marginLeft: 0, fontSize: 20, color: '#BBBCC1'}}>
           Trending Products
         </Grid>
-        <Grid container style={{padding: 10, backgroundColor: '#DDDEE0'}}>
-            <GridList cols={5} spacing={10} cellHeight={220}>
-              {
-                products.map((props, i) => (
-                  <GridListTile key={i} cols={1}>
-                    <div style={{display: 'flex', alignItems: 'center', zIndex: 1000000, position: 'absolute', left: 10, color: '#FFF', fontSize: 12, fontWeight: 'bold'}}>
-                      <Room htmlColor='#FFF' />
-                      {props.location}
-                    </div>
-                    <img src={props.image} alt={props.title} />
-                    <GridListTileBar title={props.title} subtitle={'N '+props.price} classes={gridListTileBarClasses} />
-                  </GridListTile>
-                ))
-              }
-            </GridList>
+        <Grid container style={{paddingBottom: 10, backgroundColor: '#DDDEE0'}}>
+          {/**matchesXS ? 3 : matchesMD ? 5 : 2 */}
+          <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 5} spacing={10} cellHeight={220}>
+            {
+              products.map((props, i) => (
+                <GridListTile key={i} cols={1}>
+                  <div style={{display: 'flex', alignItems: 'center', zIndex: 1000000, position: 'absolute', left: 10, color: '#FFF', fontSize: 12, fontWeight: 'bold'}}>
+                    <Room htmlColor='#FFF' />
+                    {props.location}
+                  </div>
+                  <img src={props.image} alt={props.title} />
+                  <GridListTileBar title={props.title} subtitle={'N '+props.price} classes={gridListTileBarClasses} />
+                </GridListTile>
+              ))
+            }
+          </GridList>
         </Grid>
-      </Container>
+      </div>
 
-
-      <Grid container alignItems="center" style={{backgroundColor: '#0177B6', fontSize: 17, fontFamily: 'Quicksand', color: '#FFFFFF', height: 500, marginTop: 50,}}>
-          <Grid item xs={3}>
-            <img src={footer} alt="App Store" />
-          </Grid>
-          <Grid container item xs={2} direction="column" justify="space-between" style={{height: 200}}>
-            <div>About us</div>
-            <div>About Mamaket</div>
-            <div>Terms & Conditions</div>
-            <div>Privacy Policy</div>
-            <div>Become a seller</div>
-          </Grid>
-          <Grid container item xs={2} direction="column" justify="space-between" style={{height: 200}}>
-            <div>Support</div>
-            <div>Email</div>
-            <div>Safety Tips</div>
-            <div>Contact Us</div>
-            <div>FAQ</div>
-          </Grid>
-          <Grid container item xs={2} direction="column" justify="space-between" style={{height: 200}}>
-            <div>Our Socials</div>
-            <div>Facebook</div>
-            <div>Instagram</div>
-            <div>Instagram</div>
-            <div>Youtube</div>
-          </Grid>
-          <Grid container item xs={3} direction="column" justify="space-between" alignItems="flex-start" style={{height: 200}}>
-            <div>Our Apps</div>
-            <div>Download now</div>
-            <img src={appStore} alt="App Store" />
-          </Grid>
-      </Grid>
-
-      {/* <Paper style={{width: '90%', marginLeft: '5%', backgroundColor: 'blue', height: 100 }}>
-
-      </Paper> */}
+      <Footer />
     </>
   );
 };
