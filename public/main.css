@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'BebasNeue';
+    font-style: normal;
+    font-weight: normal;
+    src: url('fonts/Bebas_Neue/BebasNeue-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: normal;
+    src: url('fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
+}
+
+.ladyInYellow {
+    position: absolute;
+    top: 35%;
+    left: 10%;
+}

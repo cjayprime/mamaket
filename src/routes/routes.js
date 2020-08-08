@@ -1,5 +1,7 @@
+import { lazy } from 'react';
+
 // Public routes components
-import Home from "./Home";
+const Home = lazy(() => import('./Home'));
 
 const routes = {
   public: [
