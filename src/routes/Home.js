@@ -170,7 +170,7 @@ const Home = () => {
           </Grid>
 
           <Grid item xs={12} sm={12} md={9}>
-            <Grid item xs={12} style={{height: 50, paddingTop: 10, paddingBottom: 10, fontSize: 20, color: '#BBBCC1'}}>
+            <Grid item xs={12} style={{height: 50, marginLeft: 10, paddingTop: 10, paddingBottom: 10, fontSize: 20, color: '#BBBCC1'}}>
               Product Categories
             </Grid>
             <GridList cols={matchesMD ? 4 : 2} spacing={10}>
