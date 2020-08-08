@@ -102,7 +102,7 @@ const Home = () => {
   const gridListTileBarClasses = useGridListTileBarStyles();
   
   useEffect(() => {
-    document.scrollingElement.scrollTop = 0.45 * document.scrollingElement.scrollHeight
+    // document.scrollingElement.scrollTop = 0.45 * document.scrollingElement.scrollHeight
   });
 
   return (
