@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     background: '#0177B6',
     boxShadow: '0px 0px 2px 0px #000000',
-    height: 50,
+    height: 70,
     zIndex:100000000,
     position: 'relative'
   },

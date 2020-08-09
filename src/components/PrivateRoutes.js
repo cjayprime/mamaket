@@ -1,10 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-export default class PrivateRoute extends Component {
-    render() {
-        const _props = this.props;
-        return (
+const PrivateRoutes = (_props) => {
+    return (
         <Route
             component={(props) => {
             const content = _props.account.storage.get() ? (
@@ -20,6 +18,7 @@ export default class PrivateRoute extends Component {
             return content;
             }}
         />
-        );
-    }
+    );
 }
+
+export default PrivateRoutes;

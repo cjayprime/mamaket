@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Paper, Grid, Box, InputBase, IconButton, Container, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
+import { Paper, Grid, Box, InputBase, IconButton, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Cake, ChevronRight, Search, Room } from '@material-ui/icons';
 
@@ -8,7 +8,6 @@ import { Layout } from '../components';
 import ladyInYellow from '../assets/images/home/ladyInYellow.png';
 import guyOnYellowBackground from '../assets/images/home/guyOnYellowBackground.png';
 import twoGuysOnWhiteBackground from '../assets/images/home/twoGuysOnWhiteBackground.png';
-import appStore from '../assets/images/home/appStore.png';
 import meatAndPoultry from '../assets/images/category/meatAndPoultry.png';
 import drink from '../assets/images/category/drink.png';
 import frozenChicken from '../assets/images/category/frozenChicken.png';
@@ -110,7 +109,7 @@ const Home = () => {
   const gridListTileBarClasses = useGridListTileBarStyles();
   
   useEffect(() => {
-    console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
+    // console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
     // document.scrollingElement.scrollTop = 1 * document.scrollingElement.scrollHeight
   });
   return (
