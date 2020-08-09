@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Paper, Grid, Box, InputBase, IconButton, Container, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Cake, ChevronRight, Search, Room } from '@material-ui/icons';
+import { ChevronRight, Search, Room } from '@material-ui/icons';
 
 import { Layout } from '../components';
 
@@ -158,7 +158,6 @@ const Home = () => {
                 {
                   categories.map((prop, i) => (
                     <Paper key={i} style={{fontSize: 13, borderRadius: 0, padding: 9, marginLeft: 10, marginRight: 10, borderBottom: '1px solid #eee', boxShadow: '0 0 0 0', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                      <Cake />
                       <span style={{marginLeft: 5}}>{prop.title}</span>
                       <ChevronRight />
                     </Paper>
