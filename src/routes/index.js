@@ -8,7 +8,7 @@ import routes from "./routes";
 
 import store from "../store";
 
-import PrivateRoutes from "../components/PrivateRoutes";
+import { PrivateRoutes } from "../components";
 
 export default
   class Routes extends Component {
