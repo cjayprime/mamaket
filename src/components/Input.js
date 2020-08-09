@@ -5,12 +5,12 @@ const style = {backgroundColor: '#FFF', color: '#67ADD3', border: '1px solid #99
 
 const Input = props => {
     const { placeholder, onChange, width } = props;
-    const _style = JSON.parse(JSON.stringify(style));
+    const newStyle = JSON.parse(JSON.stringify(style));
     if(width){
-        _style.width = width;
+        newStyle.width = width;
     }
     return (
-        <InputBase onChange={onChange} style={_style} placeholder={placeholder} />
+        <InputBase onChange={onChange} style={newStyle} placeholder={placeholder} />
     );
 };
 
