@@ -58,7 +58,7 @@ export default
                   </div>
                 )}
               />
-              <Route exact path="/">
+              <Route path="/">
                 <Redirect to={store.account.storage.get() ? "/" : "/signin"} />
               </Route>
             </Switch>
