@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from "react";
-import { Grid, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { observer } from 'mobx-react';
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter , Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 import routes from "./routes";
@@ -18,7 +18,7 @@ export default
     render() {
       return (
         <Suspense fallback={<div style={{width: '100%', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}><CircularProgress /></div>}>
-          <Router history={createBrowserHistory()}>
+          <BrowserRouter history={createBrowserHistory()}>
             <Switch>
               {
                   routes.public.map((route) => (
@@ -62,7 +62,7 @@ export default
                 <Redirect to={store.account.storage.get() ? "/" : "/signin"} />
               </Route>
             </Switch>
-          </Router>
+          </BrowserRouter >
         </Suspense>
       );
     }
