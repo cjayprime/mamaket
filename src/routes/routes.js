@@ -4,6 +4,7 @@ import { lazy } from 'react';
 const Home = lazy(() => import('./Home'));
 const Signin = lazy(() => import('./Signin'));
 const Signup = lazy(() => import('./Signup'));
+const Advertisement = lazy(() => import('./Profile/Advertisement'));
 
 const routes = {
   public: [
@@ -21,6 +22,12 @@ const routes = {
       path: "/signup",
       exact: true,
       component: Signup,
+    },
+    // TODO: move this to private routes section
+    {
+      path: "/profile/advertisement",
+      exact: true,
+      component: Advertisement,
     },
   ],
   private: [
