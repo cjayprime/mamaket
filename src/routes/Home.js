@@ -3,7 +3,7 @@ import { Paper, Grid, Box, InputBase, IconButton, GridList, GridListTile, GridLi
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronRight, Search, Room } from '@material-ui/icons';
 
-import { Layout } from '../components';
+import { Layout, ProductCatalogue } from '../components';
 
 import ladyInYellow from '../assets/images/home/ladyInYellow.png';
 import guyOnYellowBackground from '../assets/images/home/guyOnYellowBackground.png';
@@ -39,23 +39,6 @@ const useInputStyles = makeStyles(() => ({
     fontSize: 15
   },
 }));
-const useGridListTileBarStyles = makeStyles(() => ({
-  root: {
-    backgroundColor: '#FFFFFF'
-  },
-  titleWrap: {
-    color: '#BBBCC1'
-  },
-  title: {
-    color: '#BBBCC1',
-    fontSize: 12,
-    marginBottom: 5
-  },
-  subtitle: {
-    color: '#BBBCC1',
-    fontSize: 15
-  }
-}));
 const ladyInYellowStyle = {
   position: 'absolute',
   top: -30,
@@ -77,28 +60,6 @@ const categories = [
   {title: 'Baby Products', image: naijaIngredients},
   {title: 'Health & wellness', image: naijaIngredients}
 ];
-const products = [
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-  {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-];
 
 const Home = () => {
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
@@ -106,7 +67,6 @@ const Home = () => {
   const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
   const paperClasses = usePaperStyles();
   const inputClasses = useInputStyles();
-  const gridListTileBarClasses = useGridListTileBarStyles();
   
   useEffect(() => {
     // console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
@@ -198,23 +158,7 @@ const Home = () => {
         <Grid container style={{height: 50, marginLeft: 10, marginTop: matchesSM ? 0 : 20, paddingTop: 10, paddingBottom: 10, fontSize: 20, color: '#BBBCC1'}}>
           Trending Products
         </Grid>
-        <Grid container style={{paddingBottom: 10, backgroundColor: '#DDDEE0'}}>
-          {/**matchesXS ? 3 : matchesMD ? 5 : 2 */}
-          <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 5} spacing={10} cellHeight={220}>
-            {
-              products.map((props, i) => (
-                <GridListTile key={i} cols={1}>
-                  <div style={{display: 'flex', alignItems: 'center', zIndex: 1000000, position: 'absolute', left: 10, color: '#FFF', fontSize: 12, fontWeight: 'bold'}}>
-                    <Room htmlColor='#FFF' />
-                    {props.location}
-                  </div>
-                  <img src={props.image} alt={props.title} />
-                  <GridListTileBar title={props.title} subtitle={'N '+props.price} classes={gridListTileBarClasses} />
-                </GridListTile>
-              ))
-            }
-          </GridList>
-        </Grid>
+        <ProductCatalogue />
       </div>
     </Layout>
   );
