@@ -7,7 +7,7 @@ const Signup = lazy(() => import('./Signup'));
 const CurrentUser = lazy(() => import('./Profile/CurrentUser'));
 const OtherUsers = lazy(() => import('./Profile/OtherUsers'));
 const Product = lazy(() => import('./Product'));
-const Message = lazy(() => import('./Message'));
+const Messages = lazy(() => import('./Messages'));
 
 const routes = {
   public: [
@@ -45,7 +45,7 @@ const routes = {
     {
       path: "/messages",
       exact: true,
-      component: Message,
+      component: Messages,
     },
     {
       path: "/messages/:user",
