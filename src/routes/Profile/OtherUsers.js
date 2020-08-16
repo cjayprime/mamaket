@@ -5,18 +5,18 @@ import { Mail, Feedback, PhotoLibrary } from '@material-ui/icons';
 import { PrivatePages, ProductCatalogue } from '../../components';
 
 const OtherUsers = () => {
-    const { user: user } = useParams();
+    const { user } = useParams();
     return (
         <PrivatePages
             tab={0}
             type="others"
             username={user}
             tabs={[
-                {title: 'Product catalogue', component: ProductCatalogue, icon: PhotoLibrary},
-                {title: 'Messages', link: '/message/' + user, icon: Mail},
+                { component: ProductCatalogue, icon: PhotoLibrary, title: 'Product catalogue' },
+                { icon: Mail, link: `/message/${user}`, title: 'Messages' },
             ]}
         />
-    )
+    );
 };
 
 export default OtherUsers;

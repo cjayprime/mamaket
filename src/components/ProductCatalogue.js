@@ -5,45 +5,44 @@ import { Room } from '@material-ui/icons';
 
 import meatAndPoultry from '../assets/images/category/meatAndPoultry.png';
 
-
 const useGridListTileBarStyles = makeStyles(() => ({
     root: {
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
     },
-    titleWrap: {
-        color: '#BBBCC1'
+    subtitle: {
+        color: '#BBBCC1',
+        fontSize: 15,
     },
     title: {
         color: '#BBBCC1',
         fontSize: 12,
-        marginBottom: 5
+        marginBottom: 5,
     },
-    subtitle: {
+    titleWrap: {
         color: '#BBBCC1',
-        fontSize: 15
-    }
+    },
 }));
 const products = [
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
-    {title: 'Fresh apples ready for delivery', price: '18,000', location: 'Ajah, Lekki', image: meatAndPoultry},
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
+    { image: meatAndPoultry, location: 'Ajah, Lekki', price: '18,000', title: 'Fresh apples ready for delivery' },
 ];
 const ProductCatalogue = () => {
     const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
@@ -51,23 +50,23 @@ const ProductCatalogue = () => {
     const gridListTileBarClasses = useGridListTileBarStyles();
 
     return (
-        <Grid container style={{paddingBottom: 10, backgroundColor: '#DDDEE0'}}>
+        <Grid container style={{ backgroundColor: '#DDDEE0', paddingBottom: 10 }}>
             <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 5} spacing={10} cellHeight={220}>
                 {
                     products.map((props, i) => (
                         <GridListTile key={i} cols={1}>
-                            <div style={{display: 'flex', alignItems: 'center', zIndex: 1000000, position: 'absolute', left: 10, color: '#FFF', fontSize: 12, fontWeight: 'bold', height: 'auto'}}>
-                            <Room htmlColor='#FFF' />
-                            {props.location}
+                            <div style={{ alignItems: 'center', color: '#FFF', display: 'flex', fontSize: 12, fontWeight: 'bold', height: 'auto', left: 10, position: 'absolute', zIndex: 1000000 }}>
+                                <Room htmlColor='#FFF' />
+                                {props.location}
                             </div>
                             <img src={props.image} alt={props.title} />
-                            <GridListTileBar title={props.title} subtitle={'N '+props.price} classes={gridListTileBarClasses} />
+                            <GridListTileBar title={props.title} subtitle={`N ${props.price}`} classes={gridListTileBarClasses} />
                         </GridListTile>
                     ))
                 }
             </GridList>
         </Grid>
     );
-}
+};
 
 export default ProductCatalogue;

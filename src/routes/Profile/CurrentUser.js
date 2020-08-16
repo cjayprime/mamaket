@@ -3,18 +3,16 @@ import { Image, Mail, Feedback, Settings } from '@material-ui/icons';
 
 import { PrivatePages, ProductCatalogue } from '../../components';
 
-const CurrentUser = () => {
-    return (
-        <PrivatePages
-            tab={0}
-            type="mine"
-            tabs={[
-                {title: 'My adverts', component: ProductCatalogue, icon: Image},
-                {title: 'Messages', link: '/messages', icon: Mail},
-                {title: 'Settings', component: null, icon: Settings},
-            ]}
-        />
-    )
-};
+const CurrentUser = () => (
+    <PrivatePages
+        tab={0}
+        type="mine"
+        tabs={[
+            { component: ProductCatalogue, icon: Image, title: 'My adverts' },
+            { icon: Mail, link: '/messages', title: 'Messages' },
+            { component: null, icon: Settings, title: 'Settings' },
+        ]}
+    />
+);
 
 export default CurrentUser;

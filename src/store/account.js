@@ -12,41 +12,39 @@ class Account {
 
     requests = {};
 
+    signin = ({firstname, lastname, mobile}) => {
+
+        this.api("user", "POST", {
+            "first_name":   firstname,
+            "last_name":    lastname,
+            "mobile":       mobile,
+        }, "account", "");
+
+    };
+
     update = () => {
 
         this.api("user", "PUT", {
             "first_name":   this.firstname,
             "last_name":    this.lastname,
-            "mobile":       this.mobile
+            "mobile":       this.mobile,
         }, "account", "");
 
     };
-
-    sms = {
-        save: (data, callback, last) => {
-            this.api("sms", "POST", data, "account", "", (_, passed) => {
-                callback();
-
-                if(last && passed){
-                    this.getAccounts();
-                }
-            });
-        }
-    };
 }
 
-var properties = {};
-var tempStore = (new Account());
+const properties = {};
+const tempStore = (new Account());
 
-for(var property in tempStore){
+for(const property in tempStore){
     if(typeof tempStore[property] === "function"){
-        properties[property + ""] = action;
+        properties[`${property}`] = action;
     }
     // else if(Object.getPrototypeOf(tempStore).hasOwnProperty(property)){
     //     properties[property + ""] = computed;
     // }
     else{
-        properties[property + ""] = observable;
+        properties[`${property}`] = observable;
     }
 }
 
