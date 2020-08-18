@@ -1,6 +1,6 @@
-import React, { Component, Suspense } from "react";
+import React, { lazy, Component, Suspense } from "react";
 import { CircularProgress } from '@material-ui/core';
-import { observer } from 'mobx-react';
+import { observer, useObserver } from 'mobx-react';
 import { BrowserRouter , Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
@@ -11,16 +11,24 @@ import Store from "../store";
 import { PrivateRoutes } from "../components";
 
 const style = {
-  alignItems: 'center',
-  display: 'flex',
-  height: '100vh',
-  justifyContent: 'center',
-  width: '100%',
+    alignItems: 'center',
+    display: 'flex',
+    height: '100vh',
+    justifyContent: 'center',
+    width: '100%',
+};
+
+const style404 = {
+    alignItems: "center",
+    display: "flex",
+    fontSize: 200,
+    height: "100vh",
+    justifyContent: "center",
+    width: "100vw",
 };
 
 class Routes extends Component {
-    component = route =>
-        observer(props => <route.component {...props} store={Store} />);
+    component = route => observer(route.component);
 
     render() {
         return (
@@ -51,16 +59,7 @@ class Routes extends Component {
                         <Route
                             path="/404"
                             component={() => (
-                                <div
-                                    style={{
-                                        alignItems: "center",
-                                        display: "flex",
-                                        fontSize: 200,
-                                        height: "100vh",
-                                        justifyContent: "center",
-                                        width: "100vw",
-                                    }}
-                                >
+                                <div style={style404}>
                                     404
                                 </div>
                             )}

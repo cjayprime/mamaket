@@ -1,13 +1,16 @@
 import { lazy } from 'react';
 
 // Public route components
-const Home = lazy(() => import('./Home'));
-const Signin = lazy(() => import('./Signin'));
-const Signup = lazy(() => import('./Signup'));
-const CurrentUser = lazy(() => import('./Profile/CurrentUser'));
-const OtherUsers = lazy(() => import('./Profile/OtherUsers'));
-const Product = lazy(() => import('./Product'));
-const Messages = lazy(() => import('./Messages'));
+// Note: Code spliting cannot work here!
+// Since I wrap these components in a call
+// to mobx-react observer
+import Home from './Home';
+import Signin from './Signin';
+import Signup from './Signup';
+import CurrentUser from './Profile/CurrentUser';
+import OtherUsers from './Profile/OtherUsers';
+import Product from './Product';
+import Messages from './Messages';
 
 const BaseRoutes = {
     private: [
@@ -37,12 +40,12 @@ const BaseRoutes = {
         {
             component: OtherUsers,
             exact: true,
-            path: "/profile/:user",
+            path: "/profile/:userID",
         },
         {
             component: Product,
             exact: true,
-            path: "/product/:productID",// This page should mirror User, with the SOLE difference that it simply opens a product!
+            path: "/product/:productID",
         },
         {
             component: Messages,
@@ -52,7 +55,7 @@ const BaseRoutes = {
         {
             component: Messages,
             exact: true,
-            path: "/messages/:user",
+            path: "/messages/:userID",
         },
     ],
 };

@@ -1,78 +1,101 @@
-import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { Paper, Grid, Box, IconButton, Button, useMediaQuery, FormControlLabel, Checkbox } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Paper, Grid, Box, IconButton, useMediaQuery, FormControlLabel, Checkbox } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 
-import { Layout, Input } from '../components';
+import { Layout, Input, Button } from '../components';
 
-const Signup = () => {
+import Styles from '../assets/styles';
+
+import Store from '../store';
+
+const Signup = props => {
+    const { history } = props;
+    const loading = Store.account.requests.some((endpoint) => endpoint === '/auth/signup');
     const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
     const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
-    const data = useState({
-        firstname: ''
-    });
-    const change = useCallback((value, name, error) => {
-
-    });
-    const submit = useCallback(() => {
-
-    });
+    const width = matchesXS ? '80%' : '50%';
+    const init = {
+        email: '',
+        firstname: '',
+        lastname: '',
+        mobile: '',
+        password: '',
+    };
+    const [agreement, setAgreement] = useState(false);
+    const [errors, setErrors] = useState(init);
+    const [data, setData] = useState(init);
+    const {
+        firstname,
+        lastname,
+        mobile,
+        email,
+        password,
+    } = data;
+    const change = (value, name, error) => {
+        setData({ ...data, [name]: value });
+        setErrors({ ...errors, [name]: error });
+    };
+    const submit = () => {
+        Store.account.validate.request(Store.account.signup, {
+            email,
+            name: `${firstname} ${lastname}`,
+            password,
+            phoneNumber: mobile,
+            role: 'buyer',
+        }, errors, () => history.push('/signin'));
+    };
+    const container = { fontFamily: 'Quicksand', marginBottom: 100, marginLeft: matchesXS ? 0 : matchesMD ? '25%' : '10%', marginTop: 100, width: matchesXS ? '100%' : matchesMD ? '50%' : '80%' };
     return (
-        <Layout background="#EBECED">
-            <Box style={{ fontFamily: 'Quicksand', marginBottom: 100, marginLeft: matchesXS ? 0 : matchesMD ? '25%' : '10%', marginTop: 100, width: matchesXS ? '100%' : matchesMD ? '50%' : '80%' }}>
-                <Paper style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', height: 'auto', justifyContent: 'flex-start', width: '100%' }}>
-                    <Grid container item xs={12} justify="center" alignItems="center" style={{ backgroundColor: '#3492C5', color: '#FFFFFF', fontSize: 20, height: 70, padding: 10 }}>
+        <Layout background='#EBECED'>
+            <Box style={container}>
+                <Paper style={Styles.auth.paper}>
+                    <Grid container item xs={12} justify='center' alignItems='center' style={Styles.auth.header}>
                         <IconButton
-                        // onClick={handleMenu}
-                            color="inherit"
-                            style={{ fontSize: 25 }}
+                            color='inherit'
+                            style={Styles.auth.icon}
                         >
                             <AccountCircle />
                         </IconButton>
                         Register
                     </Grid>
 
-                    <Input type="text" placeholder="First Name" width={matchesXS ? '80%' : '50%'} value={} onChange={change} />
+                    <Input type='text' placeholder='First Name' name='firstname' width={width} value={firstname} onChange={change} />
 
-                    <Input type="text" placeholder="Last Name" width={matchesXS ? '80%' : '50%'} />
+                    <Input type='text' placeholder='Last Name' name='lastname' width={width} value={lastname} onChange={change} />
 
-                    <Input type="text" placeholder="Phone Number" width={matchesXS ? '80%' : '50%'} />
+                    <Input type='mobile' placeholder='Phone Number' name='mobile' width={width} value={mobile} onChange={change} />
 
-                    <Input type="email" placeholder="Email Address" width={matchesXS ? '80%' : '50%'} />
+                    <Input type='email' placeholder='Email Address' name='email' width={width} value={email} onChange={change} />
 
-                    <Input type="text" placeholder="Password" width={matchesXS ? '80%' : '50%'} />
+                    <Input type='password' placeholder='Password' name='password' width={width} value={password} onChange={change} />
 
-                    <div style={{ width: matchesXS ? '80%' : '50%' }}>
+                    <div style={{ width }}>
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={true}
-                                    // onChange={()}
-                                    name="checkedB"
-                                    color="primary"
+                                    checked={agreement}
+                                    onChange={() => setAgreement(!agreement)}
+                                    color='primary'
                                     style={{ color: '#3492C5' }}
                                 />
                             }
-                            label={<span style={{ color: '#3492C5', fontFamily: 'Quicksand' }}>I agree with the rules</span>}
+                            label={<span style={Styles.auth.terms}>I agree with the rules</span>}
                         />
                     </div>
-                
-                    <Button onClick={submit} variant="contained" color="primary" style={{ backgroundColor: '#3492C5', borderRadius: 40, fontSize: 15, fontWeight: 'normal', margin: 50, textTransform: 'none', width: '40%' }}>
+                    
+                    <Button
+                        disabled={!agreement}
+                        loading={loading}
+                        onClick={agreement ? submit : null}
+                        variant='contained'
+                        color='primary'
+                        style={Object.assign(JSON.parse(JSON.stringify(Styles.auth.button)), {opacity: agreement ? 1 : 0.5})}
+                    >
                         Register
                     </Button>
                 </Paper>
             </Box>
         </Layout>
-    );
-};
-
-Signup.AccountStatus = props => {
-    const { label, link } = props;
-    return (
-        <div style={{ color: '#ADADAD', fontSize: 15, margin: 20, textAlign: 'center' }}>
-            {label}{" "}
-            <Link to={link.url} style={{ color: '#0177B6', fontWeight: 'bold', textDecoration: 'none' }}>{link.label}</Link>
-        </div>
     );
 };
 

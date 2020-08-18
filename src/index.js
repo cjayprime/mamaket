@@ -1,13 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { SnackbarProvider } from 'notistack';
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Helper from './helper';
 
 ReactDOM.render(
-    <React.StrictMode>
+    <SnackbarProvider
+        ref={Helper.notification.reference}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        autoHideDuration={2000}
+    >
         <App />
-    </React.StrictMode>,
+    </SnackbarProvider>,
     document.getElementById('root')
 );
 

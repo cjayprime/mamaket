@@ -1,40 +1,45 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, IconButton, Paper } from '@material-ui/core';
-import { AccountCircle, Star } from '@material-ui/icons';
+import { AccountCircle, Star, StarBorder } from '@material-ui/icons';
 
-import { Layout, Input } from '.';
+import { Layout } from '.';
+
+import Store from '../store';
 
 const PrivatePages = props => {
-    const { tabs, tab } = props;
+    const { tabs, tab, userID, rating, ratingID, name, mobile, email, refresh, image } = props;
     const [currentTab, setCurrentTab] = useState(tab);
     const View = tabs[currentTab].component;
     return (
         <Layout background="#EBECED">
             <Grid container spacing={10} justify="space-evenly" style={{ marginBottom: 150, marginLeft: '5%', marginTop: 100, width: '90%' }}>
                 <Grid container item xs={12} sm={12} md={3} direction="column" alignItems="center" style={{ backgroundColor: '#FFF', color: '#0177B6', display: 'flex', fontFamily: 'Quicksand', height: 0, padding: 0 }}>
-                    <Paper style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <Paper style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <IconButton
                             color="inherit"
                         >
-                            <AccountCircle style={{ color: '#0177B6', height: 150, width: 150 }} />
+                            {
+                                image
+                                ?   <img src={image} style={{ color: '#0177B6', height: 150, width: 150 , borderRadius: 150}} />
+                                :   <AccountCircle style={{ color: '#0177B6', height: 150, width: 150 }} />
+                            }
                         </IconButton>
                         <div style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 25, fontWeight: 'bold' }}>
-                            John Doe
+                            {name}
                         </div>
                         <div style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 18 }}>
-                            +2348197222327
+                            {mobile}
                         </div>
                         <Grid item style={{ margin: 10 }}>
-                            <Star style={{ color: '#FFD700', height: 40, width: 40 }} />
-                            <Star style={{ color: '#FFD700', height: 40, width: 40 }} />
-                            <Star style={{ color: '#FFD700', height: 40, width: 40 }} />
-                            <Star style={{ color: '#FFD700', height: 40, width: 40 }} />
-                            <Star style={{ color: '#FFD700', height: 40, width: 40 }} />
+                            <Rating userID={userID} rating={rating} ratingID={ratingID} refresh={refresh} />
                         </Grid>
-                        <div style={{ background: '#0177B6', color: '#FFFFFF', display: 'flex', fontFamily: 'Quicksand', alignItems: 'center', fontSize: 15, height: 125, justifyContent: 'center', lineHeight: '20px', width: '100%', marginTop: 5, textAlign: 'center' }}>
-                            <span><span style={{ color: '#FFB000', flex: 0 }}>Alerts:</span> <span style={{ opacity: 0.7 }}>Verify your email address</span> johndoe@gmail.com</span>
-                        </div>
+                        {
+                            email &&
+                            <div style={{ background: '#0177B6', color: '#FFFFFF', display: 'flex', fontFamily: 'Quicksand', alignItems: 'center', fontSize: 15, height: 125, justifyContent: 'center', lineHeight: '20px', width: '100%', marginTop: 5, textAlign: 'center' }}>
+                                <span><span style={{ color: '#FFB000', flex: 0 }}>Alerts:</span> <span style={{ opacity: 0.7 }}>Verify your email address</span> {email}</span>
+                            </div>
+                        }
                         {
                             tabs
                                 .map((tab, i) => {
@@ -61,7 +66,7 @@ const PrivatePages = props => {
                     </Paper>
                 </Grid>
                 <Grid container item xs={12} sm={12} md={9} style={{ display: 'flex', paddingTop: 0 }}>
-                    <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, minHeight: 500, paddingTop: 0, width: '100%' }}>
+                    <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, minHeight: 230, paddingTop: 0, width: '100%' }}>
                         {
                             tabs[currentTab].title &&
                             <>
@@ -77,5 +82,44 @@ const PrivatePages = props => {
         </Layout>
     );
 };
+
+const Rating = ({ ratingID, userID, rating, refresh }) => {
+    const style = { color: '#FFD700', height: 40, width: 40, cursor: 'pointer' };
+    const [active, setActive] = useState(rating);
+    const rate = (rating) => {
+        Store.account.rate.set(
+            ratingID,
+            userID,
+            rating,
+            refresh
+        );
+    };
+    return (
+        <>
+            {
+                [1, 2, 3, 4, 5]
+                .map((_, i) => {
+                    var index = 0;
+                    if(active === -1){
+                        // use real rating
+                        index = rating;
+                    }else{
+                        index = active + 1;
+                    }
+                    const Rated = index > i ? Star : StarBorder;
+                    return (
+                        <Rated
+                            key={i}
+                            style={style}
+                            onMouseLeave={() => userID && setActive(-1)}
+                            onMouseEnter={() => userID && setActive(i)}
+                            onClick={() => rate(i)}
+                        />
+                    );
+                })
+            }
+        </>
+    );
+}
 
 export default PrivatePages;

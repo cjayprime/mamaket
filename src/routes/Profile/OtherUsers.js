@@ -1,19 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Mail, Feedback, PhotoLibrary } from '@material-ui/icons';
+import { Mail, PhotoLibrary } from '@material-ui/icons';
 
-import { PrivatePages, ProductCatalogue } from '../../components';
+import { PrivatePages, ProductCatalogue, Empty } from '../../components';
 
-const OtherUsers = () => {
-    const { user } = useParams();
+import Store from '../../store';
+
+const OtherUsers = ({ extraTabs }) => {
+    const { userID } = useParams();
+    const [name, setName] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [image, setImage] = useState('');
+    const [rating, setRating] = useState(-1);
+    const [ratingID, setRatingID] = useState(0);
+    const load = () => {
+        Store.account.user.other(userID, (user) => {
+            const { name, phoneNumber, image } = user;
+            setName(name);
+            setMobile(phoneNumber);
+            setImage(image);
+            Store.product.list.seller = [];
+            Store.product.seller(userID);
+            Store.account.rate.get(false, userID, (rate, _id) => {
+                setRating(rate);
+                setRatingID(_id);
+            });
+        });
+    };
+    useEffect(load, [Store.account.user]);
+    const moreTabs = extraTabs ? extraTabs : [];
     return (
         <PrivatePages
+            iTireOOOPropJustSoMOBXCanWork={Store.product.list.seller}
+            refresh={load}
+            rating={rating}
+            ratingID={ratingID}
+            userID={userID}
+            name={name}
+            mobile={mobile}
+            email={false}
+            image={image}
             tab={0}
-            type="others"
-            username={user}
             tabs={[
-                { component: ProductCatalogue, icon: PhotoLibrary, title: 'Product catalogue' },
-                { icon: Mail, link: `/message/${user}`, title: 'Messages' },
+                ...moreTabs,
+                { component: () => {
+                    if(Store.product.list.seller.length === 0) return <Empty title={<>There are no products in this catalogue.</>} />
+                    return <ProductCatalogue products={Store.product.list.seller} />
+                }, icon: PhotoLibrary, title: 'Product catalogue' },
+                { icon: Mail, link: `/message/${userID}`, title: 'Messages' },
             ]}
         />
     );
