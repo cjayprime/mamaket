@@ -41,27 +41,26 @@ const PrivatePages = props => {
                             </div>
                         }
                         {
-                            tabs
-                                .map((tab, i) => {
-                                    if(!tab.icon || !tab.title) return null;
+                            tabs.map((tab, i) => {
+                                if(!tab.icon || !tab.title) return null;
 
-                                    const style = { alignItems: 'center', borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', color: '#3492C5', cursor: 'pointer', display: 'flex', fontSize: 13, fontWeight: 'bold', width: '90%', padding: 15, textDecoration: 'none' };
-                                    const Child = () => (
-                                        <>
-                                            <tab.icon />
-                                            <span style={{ letterSpacing: '0.5px', marginLeft: 10 }}>{tab.title}</span>
-                                        </>
-                                    );
-                                    return (tab.link ? (
-                                        <Link to={tab.link} key={tab.title} style={style}>
-                                            <Child />
-                                        </Link>
-                                    ) : (
-                                        <div onClick={() => setCurrentTab(i)} key={tab.title} style={style}>
-                                            <Child />
-                                        </div>
-                                    ));
-                                })
+                                const style = { alignItems: 'center', borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', color: '#3492C5', cursor: 'pointer', display: 'flex', fontSize: 13, fontWeight: 'bold', width: '90%', padding: 15, textDecoration: 'none' };
+                                const Child = () => (
+                                    <>
+                                        <tab.icon />
+                                        <span style={{ letterSpacing: '0.5px', marginLeft: 10 }}>{tab.title}</span>
+                                    </>
+                                );
+                                return (tab.link ? (
+                                    <Link to={tab.link} key={tab.title} style={style}>
+                                        <Child />
+                                    </Link>
+                                ) : (
+                                    <div onClick={() => setCurrentTab(i)} key={tab.title} style={style}>
+                                        <Child />
+                                    </div>
+                                ));
+                            })
                         }
                     </Paper>
                 </Grid>
