@@ -16,91 +16,91 @@ import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    background: '#0177B6',
-    boxShadow: '0px 0px 2px 0px #000000',
-    height: 70,
-    zIndex:100000000,
-    position: 'relative'
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
+const useStyles = makeStyles(theme => ({
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    root: {
+        background: '#0177B6',
+        boxShadow: '0px 0px 2px 0px #000000',
+        flexGrow: 1,
+        height: 70,
+        position: 'relative',
+        zIndex:100000000,
+    },
+    title: {
+        flexGrow: 1,
+    },
 }));
 
 const Header = () => {
-  const classes = useStyles();
-//   const [auth, setAuth] = React.useState(true);
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-//   const open = Boolean(anchorEl);
+    const classes = useStyles();
+    //   const [auth, setAuth] = React.useState(true);
+    //   const [anchorEl, setAnchorEl] = React.useState(null);
+    //   const open = Boolean(anchorEl);
 
-//   const handleChange = (event) => {
-//     setAuth(event.target.checked);
-//   };
+    //   const handleChange = (event) => {
+    //     setAuth(event.target.checked);
+    //   };
 
-//   const handleMenu = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
+    //   const handleMenu = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    //   };
 
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
+    //   const handleClose = () => {
+    //     setAnchorEl(null);
+    //   };
 
-  return (
-    <AppBar className={classes.root} position="static">
-      <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          Mamaket
-        </Typography>
-        <div>
-          <IconButton aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <IconButton aria-label="show 17 new notifications" color="inherit">
-            <Badge badgeContent={17} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+    return (
+        <AppBar className={classes.root} position="static">
+            <Toolbar>
+                <Typography variant="h6" className={classes.title}>
+                    Mamaket
+                </Typography>
+                <div>
+                    <IconButton aria-label="show 4 new mails" color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MailIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton aria-label="show 17 new notifications" color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
 
-          <IconButton
-            // aria-label="account of current user"
-            // aria-controls="menu-appbar"
-            // aria-haspopup="true"
-            // onClick={handleMenu}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            // anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={false}
-            // open={open}
-            // onClose={handleClose}
-          >
-            {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <IconButton
+                        // aria-label="account of current user"
+                        // aria-controls="menu-appbar"
+                        // aria-haspopup="true"
+                        // onClick={handleMenu}
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        // anchorEl={anchorEl}
+                        anchorOrigin={{
+                            horizontal: 'right',
+                            vertical: 'top',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            horizontal: 'right',
+                            vertical: 'top',
+                        }}
+                        open={false}
+                        // open={open}
+                        // onClose={handleClose}
+                    >
+                        {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem> */}
-          </Menu>
-        </div>
-      </Toolbar>
-    </AppBar>
-  );
-}
+                    </Menu>
+                </div>
+            </Toolbar>
+        </AppBar>
+    );
+};
 
 export default Header;

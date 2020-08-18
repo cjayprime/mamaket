@@ -1,152 +1,153 @@
-import axios from "axios";
+import { decorate, observable, action } from 'mobx';
+import axios from 'axios';
+import qs from 'querystring';
+import jwtDecode from 'jwt-decode';
 
 import Configuration from '../mamaket.config.js';
+
+import Helper from '../helper';
 
 class Store {
     url = Configuration.url;
 
-    api = async (endpoint, method, body, subStore, callback) => {
-        this[subStore]["requests"].push(endpoint);
-        this[subStore]["message"] = "";
-        console.log(subStore, method + " request sent to:", this.url + "" + endpoint, ' with parameters: ', body);
-        
+    requests = [];
+    
+    message = '';
+    
+    status = false;
+
+    api = async (endpoint, method, body, callback) => {
+        this.requests.push(endpoint);
+        this.message = '';
+        const token = await this.storage.get('TOKEN');
+        console.log(`${method} request sent to:`, `${this.url}${endpoint}`, ' with parameters: ', body);
+
+        try{
+            const decoded = jwtDecode(token);
+            if(decoded && decoded.exp * 1000 < new Date().getTime()){
+                Helper.error('Your session has expired, sign in again');
+                window.location = '/signin';
+                return;
+            }
+        }catch{}
+
         axios({
-            url: this.url + "" + endpoint,
-            method: method,
-            data: body ? JSON.stringify(body) : null,
-            processData: false,
+            data: body ? qs.stringify(body) : null,
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + await this.storage.get("TOKEN")
-            }
-        }).then((response) => {
-            
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: method,
+            processData: true,
+            url: `${this.url}${endpoint}`,
+        }).then(response => {
             if (response.status >= 200 && response.status < 300) {
-                
-                return Promise.resolve(response)
-
+                return Promise.resolve(response);
             } else {
-                
-                var error = new Error(response.data.message || response.status);
+                const error = new Error(response.data.message || response.status);
                 error.response = response;
-                return Promise.reject(error)
-            
+                return Promise.reject(error);
             }
-
-        }).then((response) => {
-
-            // console.log('Response from ', endpoint, ' ', response.data)
-            var result = response.data;
-            const status = this.validate.response(result.status.code, result.status.desc, subStore, endpoint);
-
-            if(typeof callback === "function") callback(result, status);
-
-        }).catch(async (e) => {
-            console.log("A fatal error occurred with the server during a request to the " + this.url + '' + endpoint + " API. The error was: `"+ e + "`.", e)
-
+        }).then(response => {
+            const result = response.data;
+            const status = this.validate.response(result, endpoint);
+            if(typeof callback === 'function'){
+                callback(result, status);
+            }
+        }).catch(async e => {
             if(
                 typeof e.response !== 'undefined' &&
                 typeof e.response.data !== 'undefined' &&
-                e.response.data.status && e.response.data.status.code
+                e.response.data
             ){
-
-                const status = this.validate.response(e.response.data.status.code, e.response.data.status.desc, subStore, endpoint);
-                if(typeof callback === "function")
-                callback(e.response.data, status);
-
+                const status = this.validate.response(e.response.data, endpoint);
+                if(typeof callback === 'function'){
+                    callback(e.response.data, status);
+                }
             }else{
-
-                this[subStore]["loading"] = false;
-                this[subStore]["message"] = "A server error occurred. Contact support. Code: 1000011111";
-                this[subStore]["status"] = false;
-
+                this.loading = false;
+                this.message = 'A server error occurred. Contact support. Code: 1000011111';
+                this.status = false;
             }
         });
-
     };
 
     validate = {
-        email: email => {
-            return (! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-        },
-        response: (code, message, subStore, endpoint) => {
-            /*
-                API Responses Codes
-    
-                100 - Success
-                101 - Success (Empty Records)
-                102 - Error Reading Resource (Parameters are not Complete)
-                105 - Email ALready Registered
-                115 - Server Error
-            */
-            if(! message){
-                if(code === 100){
-                    message = "Your request completed successfully.";
-                }else if(code === 101){
-                    message = "Your request completed successfully, but there are no records.";
-                }else if(code === 102){
-                    message = "Error reading resource. Contact the admin.";
-                }else if(code === 105){
-                    message = "This email is already registered.";
-                }else if(code === 115){
-                    message = "A server error occurred. Contact the admin.";
+        request: (callback, data, errors, success, error) => {
+            // Call this.api for requests without notistack modals i.e initial page loads 
+            // Call this.validate.request for requests with automatic notistack modals i.e form requests
+            // If there's no message use this.api since the goal of this.validate.request will be defeated
+            const errorKeys = Object.keys(errors);
+            const dataKeys = Object.keys(data);
+            if(
+                errorKeys.filter(err => !errors[err]).length === errorKeys.length &&
+                dataKeys.filter(elem => !!data[elem]).length === dataKeys.length
+            ){
+                callback(data, (result, status) => {
+                    if(status){
+                        result.success &&
+                        Helper.notification.success(result.success);
+
+                        if(typeof success === 'function'){
+                            success(result, status);
+                        }
+                    }else{
+                        if(Array.isArray(result.message)){
+                            result.message.map((text) => {
+                                Helper.notification.error(text);
+                            });
+                        }else{
+                            Helper.notification.error(result.message);
+                        }
+                        
+                        if(typeof error === 'function'){
+                            error(result, status);
+                        }
+                    }
+                });
+            }else{
+                if(errorKeys.every(err => !errors[err])){
+                    Helper.notification.error('Fill the form appropriately before submitting');
+                }else{
+                    errorKeys.map(err => {
+                        if(errors[err]){
+                            Helper.notification.error(errors[err]);
+                        }
+                    });
                 }
             }
-
-            var error = code === 100 || code === 101;
-
-            this[subStore]["loading"] = false;
-            this[subStore]["requests"] = this[subStore]["requests"].filter(url => endpoint !== url);
-            this[subStore]["message"] = message;
-            this[subStore]["status"] = error;
-
-            return error;
-        
-
         },
-        form: (type, value, compareAgainst) => {
-
-            var status = true;
-            var message = "";
-
-            if(type === "text") {
-                status = ! (/^\s*$/.test(value));
-                message = status ? "" : "This field is required!";
-            }else if(type === "email") {
-                status = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                message = status ? "" : "Please enter a valid email address!";
-            }else if(type === "number") {
-                status = /^\d+$/.test(value);
-                message = status ? "" : "Please enter a valid number!";
-            }else if(type === "mobile") {
-                status = /^\+[0-9]+$/.test(value);
-                message = status ? "" : "Please enter a valid mobile number including the area code (i.e. +234)!";
-            }else if(type === "password" && ! value) {
-                message = "Please enter your password!";
-            }else if(type === "confirm-password" && ! value) {
-                message = "Please confirm your password!";
-            }else if(type === "confirm-password" && value !== compareAgainst) {
-                message = "Your password and it's confirmation do not match!";
-            }
-
-            return message;
-        
+        response: (data, endpoint) => {
+            const error = !data.message;
+            this.requests = this.requests.filter(url => endpoint !== url);
+            this.message = data.success ? data.success : Array.isArray(data.message) ? data.message.join('\n') : data.message;
+            this.status = error;
+            return error;
         }
     };
 
     storage = {
+        get: key => window.localStorage.getItem(key),
+        remove: key => window.localStorage.removeItem(key),
         set: (key, value) => {
-            window.localStorage.removeItem(key);
+            this.storage.remove(key);
             return window.localStorage.setItem(key, value);
         },
-        get: key => {
-            return window.localStorage.getItem(key);
-        },
-        remove: key => {
-            return window.localStorage.removeItem(key);
+    };
+
+    initialize = () => {
+        const properties = {};
+        const tempStore = new this.constructor();
+        for(const property in tempStore){
+            if(typeof tempStore[property] === 'function'){
+                properties[`${property}`] = action;
+            }else{
+                properties[`${property}`] = observable;
+            }
         }
+        decorate(this.constructor, properties);
     };
 }
 
 const store = new Store();
-export default store;
+export const BaseStore = Store;

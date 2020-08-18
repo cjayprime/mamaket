@@ -1,5 +1,5 @@
 const customTheme = {
-  // ...theme,
+    // ...theme,
 //   colors: {
 //     ...theme.colors,
 //     brand: {
@@ -15,5 +15,5 @@ const customTheme = {
 
 export default {
     customTheme,
-    url: "https://mamaket.herokuapp.com"
+    url: process.env.REACT_APP_BASE_URL,
 };

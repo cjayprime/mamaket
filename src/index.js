@@ -1,14 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { SnackbarProvider } from 'notistack';
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Helper from './helper';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <SnackbarProvider
+        ref={Helper.notification.reference}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        autoHideDuration={2000}
+    >
+        <App />
+    </SnackbarProvider>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

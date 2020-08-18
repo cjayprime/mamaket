@@ -6,12 +6,12 @@ import Footer from './Footer';
 const Layout = props => {
     const { background } = props;
     return (
-        <div style={{backgroundColor: background ? background : '#FFFFFF'}}>
+        <div style={{ backgroundColor: background ? background : '#FFFFFF' }}>
             <Header />
-                {props.children}
+            {props.children}
             <Footer />
         </div>
     );
-}
+};
 
 export default Layout;

@@ -1,56 +1,103 @@
-import { decorate, observable, action } from "mobx";
-// import jwtDecode from "jwt-decode";
+import { BaseStore } from './base';
 
-import Base from './base';
+import Helper from '../helper';
 
-class Account {
-    api = Base.api;
+class Account extends BaseStore {
+    id = 0;
 
-    validate = Base.validate;
+    name = '';
 
-    storage = Base.storage;
+    mobile = '';
 
-    requests = {};
+    email = '';
 
-    update = () => {
+    confirmed = false;
 
-        this.api("user", "PUT", {
-            "first_name":   this.firstname,
-            "last_name":    this.lastname,
-            "mobile":       this.mobile
-        }, "account", "");
+    role = '';
 
+    signup = (data, callback) => {
+        this.api('/auth/signup', 'POST', data, (result, status) => {
+            if(status){
+                this.name = data.name;
+                this.mobile = data.mobile;
+                this.email = data.email;
+            }
+            callback(result, status);
+        });
     };
 
-    sms = {
-        save: (data, callback, last) => {
-            this.api("sms", "POST", data, "account", "", (_, passed) => {
-                callback();
+    signin = (data, callback) => {
+        this.api('/auth/login', 'POST', data, (result, status) => {
+            if(status){
+                this.name = result.name;
+                this.mobile = result.phoneNumber;
+                this.email = result.email;
+                this.role = result.role;
+                this.storage.set('TOKEN', result.accesstoken);
+                Helper.notification.success('Successfully logged in');
+            }
+            callback(result, status);
+        });
+    };
 
-                if(last && passed){
-                    this.getAccounts();
+    user = {
+        current: callback => {
+            this.api('/profile', 'GET', null, (result, status) => {
+                if(status){
+                    this.id = result._id;
+                    this.name = result.name;
+                    this.mobile = result.phoneNumber;
+                    this.email = result.email;
+                    this.confirmed = result.confirmed;
+                    callback(this.id);
+                }
+            });
+        },
+        other: (userID, callback) => {
+            this.api('/profile/' + userID, 'GET', null, (result, status) => {
+                if(status){
+                    callback(result);
                 }
             });
         }
     };
-}
 
-var properties = {};
-var tempStore = (new Account());
-
-for(var property in tempStore){
-    if(typeof tempStore[property] === "function"){
-        properties[property + ""] = action;
+    rate = {
+        get: (me, id, callback) => {
+            // If it's my profile then me is true, or else it is false
+            const url = me ? '/rating?sellerId=' + id : '/rating/check?sellerId=' + id
+            this.api(url, 'GET', null, (result, status) => {
+                if(status){
+                    if(me){
+                        callback(result[0].avgRating, result[0]._id);
+                    }else{
+                        callback(result.rating, result._id);
+                    }
+                }
+            });
+        },
+        set: (ratingID, sellerId, rating, callback) => {
+            const url = ratingID ? '/rating/edit/' + ratingID : '/rating/rate';
+            const method = ratingID ? 'PUT' : 'POST';
+            if(sellerId){
+                this.api(url, method, {
+                    sellerId,
+                    rating
+                }, (_, status) => {
+                    if(status){
+                        callback();
+                        Helper.notification.success('You have successfully rated this user.');
+                    }else{
+                        Helper.notification.error('An error occured while trying to rate this user.');
+                    }
+                });
+            }else{
+                Helper.notification.error('You cannot rate yourself.');
+            }
+        }
     }
-    // else if(Object.getPrototypeOf(tempStore).hasOwnProperty(property)){
-    //     properties[property + ""] = computed;
-    // }
-    else{
-        properties[property + ""] = observable;
-    }
 }
-
-decorate(Account, properties);
 
 const store = new Account();
-export default store;
+store.initialize();
+export default (new Account());

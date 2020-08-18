@@ -1,51 +1,85 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Paper, Grid, Box, IconButton, Button, useMediaQuery } from '@material-ui/core';
+import { Paper, Grid, Box, IconButton, useMediaQuery } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 
-import { Layout, Input } from '../components';
+import { Layout, Input, Button } from '../components';
 
-const Signin = () => {
-  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
-  const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
-  return (
-    <Layout background="#EBECED">
-        <Box style={{width: matchesXS ? '100%' : matchesMD ? '50%' : '80%', marginLeft: matchesXS ? 0 : matchesMD ? '25%' : '10%', marginTop: 100, marginBottom: 100, fontFamily: 'Quicksand'}}>
-            <Paper style={{width: '100%', height: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
-                <Grid container item xs={12} justify="center" alignItems="center" style={{backgroundColor: '#3492C5', height: 70, padding: 10, color: '#FFFFFF', fontSize: 20}}>
-                    <IconButton
-                        // onClick={handleMenu}
-                        color="inherit"
-                        style={{fontSize: 25}}
+import Styles from '../assets/styles';
+
+import Store from '../store';
+
+
+const Signin = props => {
+    const { history } = props;
+    const loading = Store.account.requests.some((endpoint) => endpoint === '/auth/login');
+    const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
+    const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
+    const width = matchesXS ? '80%' : '50%';
+    const init = {
+        email: '',
+        password: '',
+    };
+    const [errors, setErrors] = useState(init);
+    const [data, setData] = useState(init);
+    const {
+        email,
+        password,
+    } = data;
+    const container = { fontFamily: 'Quicksand', marginBottom: 100, marginLeft: matchesXS ? 0 : matchesMD ? '25%' : '10%', marginTop: 100, width: matchesXS ? '100%' : matchesMD ? '50%' : '80%' };
+    const change = (value, name, error) => {
+        setData({ ...data, [name]: value });
+        setErrors({ ...errors, [name]: error });
+    };
+    const submit = () => {
+        Store.account.validate.request(Store.account.signin, {
+            email,
+            password,
+        }, errors, () => history.push('/profile'));
+    };
+    return (
+        <Layout background='#EBECED'>
+            <Box style={container}>
+                <Paper style={Styles.auth.paper}>
+                    <Grid container item xs={12} justify='center' alignItems='center' style={Styles.auth.header}>
+                        <IconButton
+                            color='inherit'
+                            style={Styles.auth.icon}
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        Sign In
+                    </Grid>
+                    <Input type='email' placeholder='Email' name='email' width={width} value={data.email} onChange={change} />
+
+                    <Input type='password' placeholder='Password' name='password' width={width} value={data.password} onChange={change} />
+
+                    <Signin.AccountStatus label='Forgot Password?' link={{ label: 'Click here', url: '/forgot' }} />
+                    
+                    <Button
+                        loading={loading}
+                        onClick={submit}
+                        variant='contained'
+                        color='primary'
+                        style={Styles.auth.button}
                     >
-                        <AccountCircle />
-                    </IconButton>
-                    Sign In
-                </Grid>
+                        Sign In
+                    </Button>
 
-                <Input placeholder="Email or Phone Number" width={matchesXS ? '80%' : '50%'} />
-
-                <Input placeholder="Password" width={matchesXS ? '80%' : '50%'} />
-
-                <Signin.AccountStatus label="Forgot Password?" link={{url: "/forgot", label: "Click here"}} />
-                
-                <Button variant="contained" color="primary" style={{textTransform: 'none', fontSize: 15, fontWeight: 'normal', backgroundColor: '#3492C5', borderRadius: 40, width: '40%', marginBottom: 50}}>
-                    Sign In
-                </Button>
-            </Paper>
+                </Paper>
             
-            <Signin.AccountStatus label="Don't have an account?" link={{url: "/signup", label: "Register here"}} />
-        </Box>
-    </Layout>
-  );
+                <Signin.AccountStatus label="Don't have an account?" link={{ label: 'Register here', url: '/signup' }} />
+            </Box>
+        </Layout>
+    );
 };
 
 Signin.AccountStatus = props => {
     const { label, link } = props;
     return (
-        <div style={{margin: 20, textAlign: 'center', color: '#ADADAD', fontSize: 15}}>
-            {label}{" "}
-            <Link to={link.url} style={{color: '#0177B6', textDecoration: 'none', fontWeight: 'bold'}}>{link.label}</Link>
+        <div style={{ color: '#ADADAD', fontSize: 15, margin: 20, textAlign: 'center' }}>
+            {label}{' '}
+            <Link to={link.url} style={{ color: '#0177B6', fontWeight: 'bold', textDecoration: 'none' }}>{link.label}</Link>
         </div>
     );
 };
