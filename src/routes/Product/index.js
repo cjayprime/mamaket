@@ -1,43 +1,69 @@
-import React from 'react';
-import { Image, Mail, Feedback, Settings } from '@material-ui/icons';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Mail, PhotoLibrary } from '@material-ui/icons';
 
-import { PrivatePages, ProductCatalogue } from '../../components';
+import { PrivatePages, Empty } from '../../components';
 
 import Product from './Product';
 
-import OtherUsers from '../Profile/OtherUsers';
+import Store from '../../store';
 
-const Products = () => {
-    // This should import both CurrentUser and OtherUser passing a prop that lets it know what the initial `tab` and `tabs` prop should be
+
+const MainProduct = () => {
+    // This should import both CurrentUser and OtherUser
+    // passing a prop that lets it know what the initial
+    // `tab` and `tabs` prop should be
+    const { productID } = useParams();
+    const [name, setName] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [image, setImage] = useState('');
+    const [rating, setRating] = useState(-1);
+    const [ratingID, setRatingID] = useState(0);
+    const [userID, setUserID] = useState('');
+    const load = () => {
+        Store.product.get(productID, (userID) => {
+            setUserID(userID);
+            Store.account.rate.get(false, userID, (rate, _id) => {
+                setRating(rate);
+                setRatingID(_id);
+            });
+            Store.account.user.other(userID, (user) => {
+                const { name, phoneNumber, image } = user;
+                setName(name);
+                setMobile(phoneNumber);
+                setImage(image);
+            });
+        });
+    };
+    useEffect(load, [Store.product.get]);
     return (
-        <OtherUsers extraTabs={[{ component: Product, icon: null, title: '' }]} />
+        <PrivatePages
+            iTireOOOPropJustSoMOBXCanWork={Store.product.images}
+            refresh={load}
+            rating={rating}
+            ratingID={ratingID}
+            userID={userID}
+            name={name}
+            mobile={mobile}
+            email={false}
+            image={image}
+            tab={0}
+            tabs={[
+                { component: () => {
+                    if(Store.product.images.length === 0) return <Empty title={<>This product could not be found.</>} />
+                    return (
+                        <Product
+                            images={Store.product.images}
+                            name={Store.product.name}
+                            description={Store.product.description}
+                        />
+                    );
+                }, icon: null, title: '' },
+                { icon: PhotoLibrary, link: '/profile/' + userID, title: 'Product catalogue' },
+                { icon: Mail, link: `/message/${userID}`, title: 'Messages' },
+            ]}
+        />
     );
 };
 
-export default Products;
-/*
-import React from 'react';
-import { Image, Mail, Feedback, Settings } from '@material-ui/icons';
-
-import { PrivatePages, ProductCatalogue } from '../../components';
-
-import Product from './Product';
-
-const Products = () => 
-    // This should import both CurrentUser and OtherUser passing a prop that lets it know what the initial `tab` and `tabs` prop should be
-    (
-        <PrivatePages
-            tab={0}
-            type="mine"
-            tabs={[
-                { component: Product, icon: null, title: '' },
-                { component: ProductCatalogue, icon: Image, title: 'My adverts' },
-                { icon: Mail, link: '/messages', title: 'Messages' },
-                { component: null, icon: Settings, title: 'Settings' },
-            ]}
-        />
-    )
-;
-
-export default Products;
-*/
+export default MainProduct;

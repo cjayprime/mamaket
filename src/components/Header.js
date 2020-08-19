@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import Badge from '@material-ui/core/Badge';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import { AppBar, Toolbar, Typography, IconButton, /*Switch, FormControlLabel, FormGroup,*/ Menu, MenuItem, Badge } from '@material-ui/core';
+import { AccountCircle, Menu as MenuIcon, Mail, Notifications } from '@material-ui/icons';
+
+import logo from '../assets/images/logo/header.png';
+
+import Store from '../store';
+
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
@@ -27,80 +22,97 @@ const useStyles = makeStyles(theme => ({
         height: 70,
         position: 'relative',
         zIndex:100000000,
+        zIndex: 100
     },
     title: {
         flexGrow: 1,
+        marginLeft: 50
     },
 }));
-
+const useMenuStyles = makeStyles(() => ({
+    paper: {
+        position: 'absolute',
+        right: 50,
+        marginTop: 30,
+        width: 100,
+        zIndex: 1000
+    },
+}));
 const Header = () => {
     const classes = useStyles();
-    //   const [auth, setAuth] = React.useState(true);
-    //   const [anchorEl, setAnchorEl] = React.useState(null);
-    //   const open = Boolean(anchorEl);
-
-    //   const handleChange = (event) => {
+    const menuStyles = useMenuStyles();
+    useEffect(() => {
+        Store.chat.count();
+    });
+    // const [auth, setAuth] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    // const handleChange = (event) => {
     //     setAuth(event.target.checked);
-    //   };
-
-    //   const handleMenu = (event) => {
-    //     setAnchorEl(event.currentTarget);
-    //   };
-
-    //   const handleClose = () => {
-    //     setAnchorEl(null);
-    //   };
-
+    // };
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
         <AppBar className={classes.root} position="static">
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                    Mamaket
+                    <Link to='/'><img src={logo} /></Link>
                 </Typography>
                 <div>
-                    <IconButton aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton aria-label="show 17 new notifications" color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-
-                    <IconButton
-                        // aria-label="account of current user"
-                        // aria-controls="menu-appbar"
-                        // aria-haspopup="true"
-                        // onClick={handleMenu}
-                        color="inherit"
-                    >
-                        <AccountCircle />
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        // anchorEl={anchorEl}
-                        anchorOrigin={{
-                            horizontal: 'right',
-                            vertical: 'top',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            horizontal: 'right',
-                            vertical: 'top',
-                        }}
-                        open={false}
-                        // open={open}
-                        // onClose={handleClose}
-                    >
-                        {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem> */}
-                    </Menu>
+                    {
+                        !Store.account.storage.get('TOKEN')
+                        ?   <>
+                                <Link to='/signin' style={{textDecoration: 'none', color: '#FFF'}}>
+                                    <span style={{color: '#FFFFFF', fontSize: 14, cursor: 'pointer'}}>
+                                            Sign in
+                                    </span>
+                                </Link>
+                                <span style={{margin: 15}}>|</span>
+                                <Link to='/signup' style={{textDecoration: 'none', color: '#FFF'}}>
+                                    <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
+                                            Register
+                                    </span>
+                                </Link>
+                            </>
+                        :   <>
+                                <IconButton aria-label="show 4 new mails" color="inherit">
+                                    <Link to='/message' style={{textDecoration: 'none', color: '#FFF'}}>
+                                    <Badge badgeContent={parseInt(Store.chat.total)} color="secondary">
+                                        <Mail />
+                                    </Badge>
+                                    </Link>
+                                </IconButton>
+                                <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={open}
+                                    onClose={handleClose}
+                                    classes={menuStyles}
+                                >
+                                    <MenuItem onClick={handleClose}><Link to='/profile' style={{textDecoration: 'none'}}>Profile</Link></MenuItem>
+                                    <MenuItem onClick={handleClose} onClick={Store.account.signout}>Signout</MenuItem>
+                                </Menu>
+                            </>
+                    }
+                            
                 </div>
             </Toolbar>
         </AppBar>
     );
 };
 
-export default Header;
+export default observer(Header);

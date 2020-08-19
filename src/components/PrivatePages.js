@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, IconButton, Paper } from '@material-ui/core';
+import { Grid, IconButton, Paper, useMediaQuery } from '@material-ui/core';
 import { AccountCircle, Star, StarBorder } from '@material-ui/icons';
 
 import { Layout } from '.';
@@ -8,14 +8,17 @@ import { Layout } from '.';
 import Store from '../store';
 
 const PrivatePages = props => {
+    const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
+    const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
+    // const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
     const { tabs, tab, userID, rating, ratingID, name, mobile, email, refresh, image } = props;
     const [currentTab, setCurrentTab] = useState(tab);
     const View = tabs[currentTab].component;
     return (
         <Layout background="#EBECED">
-            <Grid container spacing={10} justify="space-evenly" style={{ marginBottom: 150, marginLeft: '5%', marginTop: 100, width: '90%' }}>
-                <Grid container item xs={12} sm={12} md={3} direction="column" alignItems="center" style={{ backgroundColor: '#FFF', color: '#0177B6', display: 'flex', fontFamily: 'Quicksand', height: 0, padding: 0 }}>
-                    <Paper style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <Grid container spacing={matchesSM || matchesXS ? 0 : 10} justify="space-evenly" style={{ marginBottom: 150, marginLeft: '5%', marginTop: 100, width: '90%' }}>
+                <Grid container item xs={12} sm={12} md={3} direction="column" alignItems="center" style={{ backgroundColor: '#FFF', color: '#0177B6', display: 'flex', fontFamily: 'Quicksand', padding: 0 }}>
+                    <Paper style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', height: 'auto', width: '100%', height: 'auto', minHeight: 150 }}>
                         <IconButton
                             color="inherit"
                         >
@@ -52,11 +55,11 @@ const PrivatePages = props => {
                                     </>
                                 );
                                 return (tab.link ? (
-                                    <Link to={tab.link} key={tab.title} style={style}>
+                                    <Link to={tab.link} key={i} style={style}>
                                         <Child />
                                     </Link>
                                 ) : (
-                                    <div onClick={() => setCurrentTab(i)} key={tab.title} style={style}>
+                                    <div onClick={() => setCurrentTab(i)} key={i} style={style}>
                                         <Child />
                                     </div>
                                 ));
@@ -64,7 +67,7 @@ const PrivatePages = props => {
                         }
                     </Paper>
                 </Grid>
-                <Grid container item xs={12} sm={12} md={9} style={{ display: 'flex', paddingTop: 0 }}>
+                <Grid container item xs={12} sm={12} md={9} style={{ marginTop: matchesSM || matchesXS ? 50 : 0, display: 'flex', paddingTop: 0 }}>
                     <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, minHeight: 230, paddingTop: 0, width: '100%' }}>
                         {
                             tabs[currentTab].title &&

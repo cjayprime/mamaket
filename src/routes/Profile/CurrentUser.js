@@ -10,15 +10,14 @@ const CurrentUser = () => {
     const [rating, setRating] = useState(-1);
     const [ratingID, setRatingID] = useState(0);
     const load = () => {
-        Store.account.user.current((id) => {
-            Store.product.sponsored(id);
-            Store.account.rate.get(true, id, (rate, _id) => {
-                setRating(rate);
-                setRatingID(_id);
-            });
+        const id = Store.account.id;
+        Store.product.sponsored(id);
+        Store.account.rate.get(true, id, (rate, _id) => {
+            setRating(rate);
+            setRatingID(_id);
         });
     };
-    useEffect(load, [Store.account.user]);
+    useEffect(load, [Store.account.id]);
     return (
         <PrivatePages
             iTireOOOPropJustSoMOBXCanWork={Store.product.list.sponsored}

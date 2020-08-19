@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // Public route components
 // Note: Code spliting cannot work here!
-// Since I wrap these components in a call
+// Cause I wrap these components in a call
 // to mobx-react observer
 import Home from './Home';
 import Signin from './Signin';
@@ -14,24 +14,6 @@ import Messages from './Messages';
 
 const BaseRoutes = {
     private: [
-    ],
-    public: [
-        {
-            component: Home,
-            exact: true,
-            path: "/",
-        },
-        {
-            component: Signin,
-            exact: true,
-            path: "/signin",
-        },
-        {
-            component: Signup,
-            exact: true,
-            path: "/signup",
-        },
-        // TODO: move all below this to private routes section
         {
             component: CurrentUser,
             exact: true,
@@ -50,12 +32,29 @@ const BaseRoutes = {
         {
             component: Messages,
             exact: true,
-            path: "/messages",
+            path: "/message",
         },
         {
             component: Messages,
             exact: true,
-            path: "/messages/:userID",
+            path: "/message/:conversationID",
+        },
+    ],
+    public: [
+        {
+            component: Home,
+            exact: true,
+            path: "/",
+        },
+        {
+            component: Signin,
+            exact: true,
+            path: "/signin",
+        },
+        {
+            component: Signup,
+            exact: true,
+            path: "/signup",
         },
     ],
 };

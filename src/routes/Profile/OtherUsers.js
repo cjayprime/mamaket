@@ -6,7 +6,7 @@ import { PrivatePages, ProductCatalogue, Empty } from '../../components';
 
 import Store from '../../store';
 
-const OtherUsers = ({ extraTabs }) => {
+const OtherUsers = () => {
     const { userID } = useParams();
     const [name, setName] = useState('');
     const [mobile, setMobile] = useState('');
@@ -19,16 +19,15 @@ const OtherUsers = ({ extraTabs }) => {
             setName(name);
             setMobile(phoneNumber);
             setImage(image);
-            Store.product.list.seller = [];
-            Store.product.seller(userID);
-            Store.account.rate.get(false, userID, (rate, _id) => {
-                setRating(rate);
-                setRatingID(_id);
-            });
+        });
+        Store.product.list.seller = [];
+        Store.product.seller(userID);
+        Store.account.rate.get(false, userID, (rate, _id) => {
+            setRating(rate);
+            setRatingID(_id);
         });
     };
     useEffect(load, [Store.account.user]);
-    const moreTabs = extraTabs ? extraTabs : [];
     return (
         <PrivatePages
             iTireOOOPropJustSoMOBXCanWork={Store.product.list.seller}
@@ -42,7 +41,6 @@ const OtherUsers = ({ extraTabs }) => {
             image={image}
             tab={0}
             tabs={[
-                ...moreTabs,
                 { component: () => {
                     if(Store.product.list.seller.length === 0) return <Empty title={<>There are no products in this catalogue.</>} />
                     return <ProductCatalogue products={Store.product.list.seller} />
