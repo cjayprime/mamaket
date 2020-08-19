@@ -1,7 +1,7 @@
 import { decorate, observable, action } from 'mobx';
 import axios from 'axios';
 import qs from 'querystring';
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 
 import Configuration from '../mamaket.config.js';
 
@@ -21,15 +21,6 @@ class Store {
         this.message = '';
         const token = await this.storage.get('TOKEN');
         console.log(`${method} request sent to:`, `${this.url}${endpoint}`, ' with parameters: ', body);
-
-        try{
-            const decoded = jwtDecode(token);
-            if(decoded && decoded.exp * 1000 < new Date().getTime()){
-                Helper.error('Your session has expired, sign in again');
-                window.location = '/signin';
-                return;
-            }
-        }catch{}
 
         axios({
             data: body ? qs.stringify(body) : null,
@@ -55,19 +46,22 @@ class Store {
                 callback(result, status);
             }
         }).catch(async e => {
+            var data = {};
+            var status = false;
             if(
                 typeof e.response !== 'undefined' &&
                 typeof e.response.data !== 'undefined' &&
                 e.response.data
             ){
-                const status = this.validate.response(e.response.data, endpoint);
-                if(typeof callback === 'function'){
-                    callback(e.response.data, status);
-                }
+                data = e.response.data;
+                status = this.validate.response(e.response.data, endpoint);
             }else{
-                this.loading = false;
-                this.message = 'A server error occurred. Contact support. Code: 1000011111';
-                this.status = false;
+                data = {message: 'An unknown error occured with the request.'};
+                status = this.validate.response(data, endpoint);
+            }
+            
+            if(typeof callback === 'function'){
+                callback(data, status);
             }
         });
     };

@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Paper, Grid, Box, InputBase, IconButton, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ChevronRight, Search, Room } from '@material-ui/icons';
+import { ChevronRight, Search } from '@material-ui/icons';
 
 import { Layout, ProductCatalogue } from '../components';
+
+import Store from '../store';
 
 import ladyInYellow from '../assets/images/home/ladyInYellow.png';
 import guyOnYellowBackground from '../assets/images/home/guyOnYellowBackground.png';
 import twoGuysOnWhiteBackground from '../assets/images/home/twoGuysOnWhiteBackground.png';
-import meatAndPoultry from '../assets/images/category/meatAndPoultry.png';
-import drink from '../assets/images/category/drink.png';
-import frozenChicken from '../assets/images/category/frozenChicken.png';
-import naijaIngredients from '../assets/images/category/naijaIngredients.png';
-import freshFruits from '../assets/images/category/freshFruits.png';
+
 
 const usePaperStyles = makeStyles(() => ({
     root: {
@@ -20,7 +18,6 @@ const usePaperStyles = makeStyles(() => ({
         borderRadius: 0,
         boxShadow: '0 0 0 0',
         flexGrow: 1,
-        height: 'calc(50vh - 90px)',
         overflow: 'hidden',
         position: 'relative',
         width: '100%',
@@ -46,43 +43,34 @@ const ladyInYellowStyle = {
     top: -30,
     zIndex: 5000,
 };
-const categories = [
-    { image: meatAndPoultry, title: 'Meat & Poultry' },
-    { image: drink, title: 'Drinks' },
-    { image: frozenChicken, title: 'Frozen Foods' },
-    { image: naijaIngredients, title: 'Naija Ingredients' },
-    { image: naijaIngredients, title: 'Beauty & Skincare' },
-    { image: naijaIngredients, title: 'Household items' },
-    { image: naijaIngredients, title: 'Fashion' },
-    { image: naijaIngredients, title: 'Vegetables' },
-    { image: freshFruits, title: 'Fresh Fruits' },
-    { image: naijaIngredients, title: 'Snacks' },
-    { image: naijaIngredients, title: 'Baby Products' },
-    { image: naijaIngredients, title: 'Health & wellness' },
-];
-
 const Home = () => {
     const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
     const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
     const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
     const paperClasses = usePaperStyles();
     const inputClasses = useInputStyles();
-  
-    useEffect(() => {
+    // useEffect(() => {
     // console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
     // document.scrollingElement.scrollTop = 1 * document.scrollingElement.scrollHeight
-    });
+    // });
+    useEffect(() => {
+        Store.product.categories();
+        Store.product.trends();
+        // $('#search-box').css({left: $('#hash-search-box').offset().left})
+    }, [Store.product.categories, Store.product.trends]);
+    const hashSearchBox = useRef();
     return (
         <Layout>
-            <Paper elevation={0} classes={paperClasses}>
+            <Paper elevation={0} classes={paperClasses} style={{height: matchesXS || matchesSM ? 'calc(40vh - 90px)' : 'calc(50vh - 90px)'}}>
                 <Hidden only={['xs', 'sm']}>
                     <img src={ladyInYellow} alt="Lady in Yellow" style={ladyInYellowStyle} />
                 </Hidden>
                 <Box display="flex" justifyContent="center"  alignItems="center" style={{ height: '50%', position: 'relative', width: '100%', zIndex: 100000 }}>
-                    <Box display="flex" justifyContent="center" alignItems="center" style={{ backgroundColor: "#FFF", borderRadius: '7px 0 0 7px', color: '#2DC7FF', fontSize: 20, height: 50, paddingLeft: 30, width: 10 }}>
+                    <Box ref={hashSearchBox} id="hash-search-box" display="flex" justifyContent="center" alignItems="center" style={{ backgroundColor: "#FFF", borderRadius: '7px 0 0 7px', color: '#2DC7FF', fontSize: 20, height: 50, paddingLeft: 30, width: 10 }}>
                         <span style={{ marginTop: -3 }}>#</span>
                     </Box>
                     <InputBase classes={inputClasses} placeholder="What do you want to buy?" style={{ width: matchesXS ? '70%' : '35%' }} />
+                    {/* <div id="search-box" style={{position: 'absolute', height: 50, width: 200, background: 'red', left: 0}}></div> */}
                     <IconButton style={{ backgroundColor: '#2DC7FF', borderRadius: '0 7px 7px 0', color: '#FFF', height: 50, padding: 20, width: 55 }}>
                         <Search />
                     </IconButton>
@@ -114,9 +102,9 @@ const Home = () => {
                             </Grid>
                             <Grid item xs={12} style={{ backgroundColor: '#FFF', border: '1px solid #0177B6' }}>
                                 {
-                                    categories.map((prop, i) => (
+                                    Store.product.list.categories.map((prop, i) => (
                                         <Paper key={i} style={{ alignItems: 'center', borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', cursor: 'pointer', display: 'flex', fontSize: 13, justifyContent: 'space-between', marginLeft: 10, marginRight: 10, padding: 9 }}>
-                                            <span style={{ marginLeft: 5 }}>{prop.title}</span>
+                                            <span style={{ marginLeft: 5 }}>{prop.name}</span>
                                             <ChevronRight />
                                         </Paper>
                                     ))
@@ -126,25 +114,27 @@ const Home = () => {
                                 </Paper>
                             </Grid>
                             {/* <Paper style={{boxShadow: '0 0 0 0', marginTop: 10, padding: 5, borderRadius: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontFamily: 'Quicksand', fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>
-                <div style={{width: '60%', color: '#0177B6'}}>
-                  Download the Mamaket mobile
-                </div>
-                <div style={{color: '#FFAF00', marginBottom: 15}}>Application</div>
-                <img src={appStore} alt="App Store" />
-              </Paper> */}
+                                <div style={{width: '60%', color: '#0177B6'}}>
+                                Download the Mamaket mobile
+                                </div>
+                                <div style={{color: '#FFAF00', marginBottom: 15}}>Application</div>
+                                <img src={appStore} alt="App Store" />
+                            </Paper> */}
                         </Grid>
                     </Hidden>
 
                     <Grid item xs={12} sm={12} md={9}>
-                        <Grid item xs={12} style={{ color: '#BBBCC1', fontSize: 20, height: 50, marginLeft: 10, marginTop: matchesSM ? 0 : 20, paddingBottom: 10, paddingTop: 10 }}>
-                            Product Categories
-                        </Grid>
+                        <Hidden only={['xs', 'sm']}>
+                            <Grid item xs={12} style={{ color: '#BBBCC1', fontSize: 20, height: 50, marginLeft: 10, marginTop: matchesSM ? 0 : 20, paddingBottom: 10, paddingTop: 10 }}>
+                                Product Categories
+                            </Grid>
+                        </Hidden>
                         <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 4} spacing={10}>
                             {
-                                categories.map((props, i) => (
+                                Store.product.list.categories.map((props, i) => (
                                     <GridListTile key={i} cols={1}>
-                                        <img src={props.image} alt={props.title} />
-                                        <GridListTileBar title={props.title} style={{ backgroundColor: '#FFFFFF17', border: '1px solid #0177B6', left: '50%', position: 'absolute', right: 'auto', top: 'calc(50% - 24px)', transform: 'translate(-50%, 0)' }} />
+                                        <img src={props.image} alt={props.name} />
+                                        <GridListTileBar title={props.name} style={{ backgroundColor: '#FFFFFF17', border: '1px solid #0177B6', left: '50%', position: 'absolute', right: 'auto', top: 'calc(50% - 24px)', transform: 'translate(-50%, 0)' }} />
                                     </GridListTile>
                                 ))
                             }
@@ -155,7 +145,8 @@ const Home = () => {
                 <Grid container style={{ color: '#BBBCC1', fontSize: 20, height: 50, marginLeft: 10, marginTop: matchesSM ? 0 : 20, paddingBottom: 10, paddingTop: 10 }}>
                     Trending Products
                 </Grid>
-                <ProductCatalogue />
+                {/* <ProductCatalogue /> */}
+                <ProductCatalogue products={Store.product.list.trends} />
             </div>
         </Layout>
     );

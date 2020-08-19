@@ -27,7 +27,7 @@ const ProductCatalogue = ({ products }) => {
     const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
     const gridListTileBarClasses = useGridListTileBarStyles();
     const prod = products//.concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products)
-    const style = prod.length > 3 ? null : {width: 230};
+    const style = prod.length > 3 ? null : {width: 230, padding: 8};
     return (
         <Grid container style={{ backgroundColor: '#DDDEE0' }}>
             <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 5} spacing={10} cellHeight={220}>

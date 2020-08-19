@@ -48,7 +48,6 @@ class Routes extends Component {
                         {
                             BaseRoutes.private.map(route => (
                                 <PrivateRoutes
-                                    account={Store}
                                     key={route.path}
                                     path={route.path}
                                     exact={route.exact}

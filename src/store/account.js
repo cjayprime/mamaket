@@ -15,6 +15,11 @@ class Account extends BaseStore {
 
     role = '';
 
+    signout = () => {
+        this.storage.remove('TOKEN');
+        Helper.notification.success('Successfully logged out');
+    };
+
     signup = (data, callback) => {
         this.api('/auth/signup', 'POST', data, (result, status) => {
             if(status){
@@ -49,7 +54,17 @@ class Account extends BaseStore {
                     this.mobile = result.phoneNumber;
                     this.email = result.email;
                     this.confirmed = result.confirmed;
-                    callback(this.id);
+                    // callback(this.id);
+                }else{
+                    // If request fails test the token validity, and go to log in if invalid
+                    // try{
+                    //     const decoded = jwtDecode(token);
+                    //     if(decoded && decoded.exp * 1000 < new Date().getTime()){
+                    //         Helper.error('Your session has expired, sign in again');
+                    //         window.location = 'signin';
+                    //         return;
+                    //     }
+                    // }catch{}
                 }
             });
         },
@@ -57,6 +72,8 @@ class Account extends BaseStore {
             this.api('/profile/' + userID, 'GET', null, (result, status) => {
                 if(status){
                     callback(result);
+                }else{
+                    // If request fails go to /profile page
                 }
             });
         }
@@ -95,7 +112,7 @@ class Account extends BaseStore {
                 Helper.notification.error('You cannot rate yourself.');
             }
         }
-    }
+    };
 }
 
 const store = new Account();
