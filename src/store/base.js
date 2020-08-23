@@ -87,7 +87,7 @@ class Store {
                         }
                     }else{
                         if(Array.isArray(result.message)){
-                            result.message.map((text) => {
+                            result.message.forEach((text) => {
                                 Helper.notification.error(text);
                             });
                         }else{
@@ -103,7 +103,7 @@ class Store {
                 if(errorKeys.every(err => !errors[err])){
                     Helper.notification.error('Fill the form appropriately before submitting');
                 }else{
-                    errorKeys.map(err => {
+                    errorKeys.forEach(err => {
                         if(errors[err]){
                             Helper.notification.error(errors[err]);
                         }
@@ -143,5 +143,4 @@ class Store {
     };
 }
 
-const store = new Store();
 export const BaseStore = Store;

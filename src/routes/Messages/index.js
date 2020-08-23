@@ -73,11 +73,15 @@ const Messages = () => {
                         {
                             Store.chat.messages.map((message, i) => {
                                 const { participants, latestMessage: { text, read, /*sender,*/ createdAt, conversation }, refProduct } = message;
+                                let index = 0;
+                                if(participants[0]._id === Store.account.id){
+                                    index = 1;
+                                }
                                 return (
                                     <Messages.User
                                         key={i}
-                                        name={participants[0].name}
-                                        image={participants[0].image}
+                                        name={participants[index].name}
+                                        image={participants[index].image}
                                         text={text}
                                         read={read}
                                         // sender={sender}
@@ -93,10 +97,10 @@ const Messages = () => {
                 <Grid container item xs={12} sm={12} md={9} style={{ marginTop: matchesSM || matchesXS ? 50 : 0, height: 'auto', paddingBottom: 0, paddingTop: 0 }}>
                     <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, overflow: 'hidden', overflowY: 'auto', paddingBottom: 0, paddingTop: 0, width: '100%', zIndex: 10000/*, marginBottom: 0, maxHeight: 550*/ }}>
                         {
-                            Store.chat.conversations.length === 0
-                            ?   <Empty icon={Message} title={<>You have no messages with {name}</>} />
-                            :   !conversationID
-                                ?   <Empty icon={Message} title={<>You haven't selected a seller to message.</>} />
+                            !conversationID
+                            ?   <Empty icon={Message} title={<>You haven't selected a seller to message.</>} />
+                            :   Store.chat.conversations.length === 0
+                                ?   <Empty icon={Message} title={<>You have no messages with {name}</>} />
                                 :   <>
                                         <div style={{ backgroundColor: '#0177B6', borderBottom: '2px solid #eee', color: '#FFFFFF', fontWeight: '900', height: 30, padding: 30, width: '100%' }}>
                                             {name}

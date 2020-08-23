@@ -49,14 +49,9 @@ const Home = () => {
     const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
     const paperClasses = usePaperStyles();
     const inputClasses = useInputStyles();
-    // useEffect(() => {
-    // console.log(matchesXS, matchesSM, matchesMD, window.innerWidth)
-    // document.scrollingElement.scrollTop = 1 * document.scrollingElement.scrollHeight
-    // });
     useEffect(() => {
         Store.product.categories();
         Store.product.trends();
-        // $('#search-box').css({left: $('#hash-search-box').offset().left})
     }, [Store.product.categories, Store.product.trends]);
     const hashSearchBox = useRef();
     return (
@@ -123,7 +118,7 @@ const Home = () => {
                         </Grid>
                     </Hidden>
 
-                    <Grid item xs={12} sm={12} md={9}>
+                    <Grid item xs={12} sm={12} md={9} style={{padding: matchesXS || matchesSM ? 10 : 0}}>
                         <Hidden only={['xs', 'sm']}>
                             <Grid item xs={12} style={{ color: '#BBBCC1', fontSize: 20, height: 50, marginLeft: 10, marginTop: matchesSM ? 0 : 20, paddingBottom: 10, paddingTop: 10 }}>
                                 Product Categories
