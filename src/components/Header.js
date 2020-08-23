@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, /*Switch, FormControlLabel, FormGroup,*/ Menu, MenuItem, Badge } from '@material-ui/core';
-import { AccountCircle, Menu as MenuIcon, Mail, Notifications } from '@material-ui/icons';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Badge } from '@material-ui/core';
+import { AccountCircle, Mail } from '@material-ui/icons';
 
 import logo from '../assets/images/logo/header.png';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         flexGrow: 1,
-        marginLeft: 50
+        marginTop: 10,
     },
 }));
 const useMenuStyles = makeStyles(() => ({
@@ -35,7 +35,7 @@ const useMenuStyles = makeStyles(() => ({
         right: 50,
         marginTop: 30,
         width: 100,
-        zIndex: 1000
+        zIndex: 1000000000,
     },
 }));
 const Header = () => {
@@ -44,12 +44,8 @@ const Header = () => {
     useEffect(() => {
         Store.chat.count();
     });
-    // const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    // const handleChange = (event) => {
-    //     setAuth(event.target.checked);
-    // };
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -74,12 +70,12 @@ const Header = () => {
                                 <span style={{margin: 15}}>|</span>
                                 <Link to='/signup' style={{textDecoration: 'none', color: '#FFF'}}>
                                     <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
-                                            Register
+                                        Register
                                     </span>
                                 </Link>
                             </>
                         :   <>
-                                <IconButton aria-label="show 4 new mails" color="inherit">
+                                <IconButton aria-label={"Show " + Store.chat.total + " new mails"} color="inherit">
                                     <Link to='/message' style={{textDecoration: 'none', color: '#FFF'}}>
                                     <Badge badgeContent={parseInt(Store.chat.total)} color="secondary">
                                         <Mail />
@@ -107,8 +103,7 @@ const Header = () => {
                                     <MenuItem onClick={handleClose} onClick={Store.account.signout}>Signout</MenuItem>
                                 </Menu>
                             </>
-                    }
-                            
+                    }       
                 </div>
             </Toolbar>
         </AppBar>

@@ -14,12 +14,19 @@ class Product extends BaseStore {
 
     description  = '';
 
+    price = '';
+
+    id = '';
+
     get = (id, callback) => {
         this.api('/product/' + id, 'GET', null, (result, status) => {
+            console.log(result, status)
             if(status){
                 this.name = result.name;
                 this.description = result.description;
                 this.images = result.images;
+                this.price = result.price;
+                this.id = result._id;
                 callback(result.sellerId._id);
             }
         });
@@ -55,6 +62,24 @@ class Product extends BaseStore {
                 this.list.categories = result;
             }
         });
+    };
+
+    bookmark = {
+        get: callback => {
+            this.api('/product/bookmarked', 'GET', null, (result, status) => {
+                if(status){
+                    callback(result);
+                }
+            });
+        },
+        set: (id, marked, callback) => {
+            const url = marked ? '/product/bookmark/remove/' + id : '/product/bookmark/' + id;
+            this.api(url, 'PUT', null, (result, status) => {
+                if(status){
+                    callback(result);
+                }
+            });
+        }
     };
 }
 

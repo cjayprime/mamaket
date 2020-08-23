@@ -11,11 +11,13 @@ const CurrentUser = () => {
     const [ratingID, setRatingID] = useState(0);
     const load = () => {
         const id = Store.account.id;
-        Store.product.sponsored(id);
-        Store.account.rate.get(true, id, (rate, _id) => {
-            setRating(rate);
-            setRatingID(_id);
-        });
+        if(id){
+            Store.product.sponsored(id);
+            Store.account.rate.get(true, id, (rate, _id) => {
+                setRating(rate);
+                setRatingID(_id);
+            });
+        }
     };
     useEffect(load, [Store.account.id]);
     return (
@@ -35,7 +37,7 @@ const CurrentUser = () => {
                     if(Store.product.list.sponsored.length === 0) return <Empty title={<>There are no sponsored products to display.</>} />
                     return <ProductCatalogue products={Store.product.list.sponsored} />
                 }, icon: Image, title: 'Sponsored' },
-                { icon: Mail, link: '/messages', title: 'Messages' },
+                { icon: Mail, link: '/message', title: 'Messages' },
                 // { component: null, icon: Settings, title: 'Settings' },
             ]}
         />

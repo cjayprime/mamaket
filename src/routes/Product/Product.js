@@ -1,17 +1,25 @@
-import React, { /*useEffect,*/ useState } from 'react';
-import { /*Grid, */Paper } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Paper } from '@material-ui/core';
+import { Bookmark, BookmarkBorder } from '@material-ui/icons';
 
-// import prod from './prod.png';
+import Store from '../../store';
 
-// import Store from '../../store';
-
-const Product = ({ images, name, description }) => {
+const Product = ({ id, images, name, description, price }) => {
     const [largeImage, setLargeImage] = useState('');
-    // const [sponsored, setSponsored] = useState(-1);
-    // const load = () => {
-    //     Store.product.sponsored(0);
-    // };
-    // useEffect(load, [Store.product.sponsored]);
+    const [bookmarks, setBookmarks] = useState([]);
+    const load = () => {
+        Store.product.bookmark.get((result) => {
+            if(result)
+            setBookmarks(result);
+        });
+    };
+    useEffect(load, [Store.product.bookmark.get]);
+    let marked = false;
+    let Component = BookmarkBorder;
+    if(bookmarks.some(mark => mark._id === id)){
+        marked = true;
+        Component = Bookmark;
+    }
     return (
         <>
             <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, paddingTop: 0, width: '100%' }}>
@@ -30,8 +38,20 @@ const Product = ({ images, name, description }) => {
                     }
                 </div>
 
-                <div style={{ color: '#0177B6', fontSize: 25, fontWeight: 'bold', marginLeft: 10, marginTop: 25 }}>
-                    {name}
+                <div style={{ color: '#0177B6', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', fontSize: 25, fontWeight: 'bold', marginLeft: 10, marginRight: 10, marginTop: 25 }}>
+                    <span>{name}</span>
+                    <span>
+                        <Component
+                            htmlColor="#0177B6"
+                            style={{position: 'relative', top: 3, marginRight: 10, cursor: 'pointer'}}
+                            onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                Store.product.bookmark.set(id, marked, load);
+                            }}
+                        />
+                        {'\u20A6'}{price}
+                    </span>
                 </div>
 
                 <div style={{ color: '#868687', fontSize: 15, fontWeight: 'bold', marginLeft: 10, marginTop: 10 }}>

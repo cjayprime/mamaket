@@ -25,11 +25,6 @@ const BaseRoutes = {
             path: "/profile/:userID",
         },
         {
-            component: Product,
-            exact: true,
-            path: "/product/:productID",
-        },
-        {
             component: Messages,
             exact: true,
             path: "/message",
@@ -55,6 +50,11 @@ const BaseRoutes = {
             component: Signup,
             exact: true,
             path: "/signup",
+        },
+        {
+            component: Product,
+            exact: true,
+            path: "/product/:productID",
         },
     ],
 };

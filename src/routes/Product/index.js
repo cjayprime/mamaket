@@ -56,6 +56,8 @@ const MainProduct = () => {
                             images={Store.product.images}
                             name={Store.product.name}
                             description={Store.product.description}
+                            price={Store.product.price}
+                            id={Store.product.id}
                         />
                     );
                 }, icon: null, title: '' },
