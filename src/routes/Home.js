@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Paper, Grid, Box, InputBase, IconButton, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronRight, Search } from '@material-ui/icons';
@@ -98,15 +99,17 @@ const Home = () => {
                             <Grid item xs={12} style={{ backgroundColor: '#FFF', border: '1px solid #0177B6' }}>
                                 {
                                     Store.product.list.categories.map((prop, i) => (
-                                        <Paper key={i} style={{ alignItems: 'center', borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', cursor: 'pointer', display: 'flex', fontSize: 13, justifyContent: 'space-between', marginLeft: 10, marginRight: 10, padding: 9 }}>
-                                            <span style={{ marginLeft: 5 }}>{prop.name}</span>
+                                        <Paper key={i} style={{ alignItems: 'center', borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', cursor: 'pointer', display: 'flex', fontSize: 13, justifyContent: 'space-between', marginLeft: 10, marginRight: 10, padding: 11 }}>
+                                            <Link to={'/product?category=' + encodeURIComponent(prop.name.toLowerCase()) + '&id=' + prop._id} style={{textDecoration: 'none', color: '#000000'}}>
+                                                <span style={{ marginLeft: 5 }}>{prop.name}</span>
+                                            </Link>
                                             <ChevronRight />
                                         </Paper>
                                     ))
                                 }
-                                <Paper style={{ borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', cursor: 'pointer', fontSize: 13, marginLeft: 10, marginRight: 10, padding: 12.5, textAlign: 'center' }}>
+                                {/* <Paper style={{ borderBottom: '1px solid #eee', borderRadius: 0, boxShadow: '0 0 0 0', cursor: 'pointer', fontSize: 13, marginLeft: 10, marginRight: 10, padding: 12.5, textAlign: 'center' }}>
                                     See more
-                                </Paper>
+                                </Paper> */}
                             </Grid>
                             {/* <Paper style={{boxShadow: '0 0 0 0', marginTop: 10, padding: 5, borderRadius: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontFamily: 'Quicksand', fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>
                                 <div style={{width: '60%', color: '#0177B6'}}>
@@ -126,10 +129,12 @@ const Home = () => {
                         </Hidden>
                         <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 4} spacing={10}>
                             {
-                                Store.product.list.categories.map((props, i) => (
+                                Store.product.list.categories.map((prop, i) => (
                                     <GridListTile key={i} cols={1}>
-                                        <img src={props.image} alt={props.name} />
-                                        <GridListTileBar title={props.name} style={{ backgroundColor: '#FFFFFF17', border: '1px solid #0177B6', left: '50%', position: 'absolute', right: 'auto', top: 'calc(50% - 24px)', transform: 'translate(-50%, 0)' }} />
+                                        <img src={prop.image} alt={prop.name} />
+                                        <Link to={'/product?category=' + encodeURIComponent(prop.name.toLowerCase()) + '&id=' + prop._id} style={{textDecoration: 'none'}}>
+                                            <GridListTileBar title={prop.name} style={{ backgroundColor: '#0177B6', color: '#000', opacity: 0.7, border: '1px solid #0177B6', left: '50%', position: 'absolute', right: 'auto', top: 'calc(50% - 24px)', transform: 'translate(-50%, 0)' }} />
+                                        </Link>
                                     </GridListTile>
                                 ))
                             }

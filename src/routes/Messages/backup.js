@@ -15,7 +15,7 @@ const Messages = () => {
     const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
     // const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
     const chatBox = useRef();
-    const { sellerID } = useParams();
+    const { conversationID } = useParams();
     const [name, setName] = useState('');
     const [image, setImage] = useState('');
     const [id, setID] = useState('');
@@ -36,43 +36,32 @@ const Messages = () => {
         }
     }, [Store.chat.conversations.length]);
     useEffect(() => {
-        Store.chat.get();
-    }, [Store.chat.get]);
-    useEffect(() => {
-        if(Store.account.id && sellerID){
-            // Get the conversationID
-            var conversationID = 0;
-            Store.chat.messages.map(message => {
-                if(
-                    message.participants[0]._id === sellerID ||
-                    message.participants[1]._id === sellerID
-                ){
-                    conversationID = message._id;
-                    Store.chat.thread(conversationID);
-                    Store.chat.start(Store.account.id);
-
-                    var index = 0;
-                    if(message.participants[1]._id === sellerID){
-                        index = 1;
+        if(Store.account.id){
+            Store.chat.get();
+            if(conversationID){
+                Store.chat.thread(conversationID, () => {
+                    const userID = Store.account.id;
+                    Store.chat.start(userID);
+                    
+                    var otherUser = {};
+                    var where = 'receiver';
+                    otherUser = Store.chat.conversations.find(convo => convo.receiver !== userID);
+                    if(!otherUser){
+                        otherUser = Store.chat.conversations.find(convo => convo.sender._id !== userID);
+                        where = 'sender';
                     }
-                    const { name, image, _id } = message.participants[index];
-                    setName(name);
-                    setImage(image);
-                    setID(_id);
-                }
-            });
-            if(!conversationID){
-                Store.account.user.other(sellerID, (result, status) => {
-                    const { name, image, _id } = result;
-                    setName(name);
-                    setImage(image);
-                    setID(_id);
+                    Store.account.user.other(where === 'receiver' ? otherUser.receiver : otherUser.sender._id, (user) => {
+                        const { name, image, _id } = user;
+                        setName(name);
+                        setImage(image);
+                        setID(_id)
+                    });
                 });
             }
         }
 
         return () => Store.chat.socket && Store.chat.socket.disconnect();
-    }, [Store.account.id, Store.chat.messages]);
+    }, [Store.account.id]);
     return (
         <Layout background="#EBECED">
             <Grid container spacing={matchesSM || matchesXS ? 0 : 10} justify="space-evenly" style={{ marginBottom: 0, marginLeft: '5%', marginTop: 100, width: '90%' }}>
@@ -93,14 +82,13 @@ const Messages = () => {
                                 return (
                                     <Messages.User
                                         key={i}
-                                        id={participants[index]._id}
                                         name={participants[index].name}
                                         image={participants[index].image}
                                         text={text}
                                         read={read}
                                         // sender={sender}
                                         date={createdAt}
-                                        // conversation={conversation}
+                                        conversation={conversation}
                                         refProduct={refProduct}
                                     />
                                 );
@@ -111,17 +99,17 @@ const Messages = () => {
                 <Grid container item xs={12} sm={12} md={9} style={{ marginTop: matchesSM || matchesXS ? 50 : 0, height: 'auto', paddingBottom: 0, paddingTop: 0 }}>
                     <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, overflow: 'hidden', overflowY: 'auto', paddingBottom: 0, paddingTop: 0, width: '100%', zIndex: 10000/*, marginBottom: 0, maxHeight: 550*/ }}>
                         {
-                            !sellerID
+                            !conversationID
                             ?   <Empty icon={Message} title={<>You haven't selected a seller to message.</>} />
-                            :   <>
-                                    <div style={{ backgroundColor: '#0177B6', borderBottom: '2px solid #eee', color: '#FFFFFF', fontWeight: '900', height: 30, padding: 30, width: '100%' }}>
-                                        {name}
-                                    </div>
-                                    <div style={{overflow: 'auto', overflowX: 'hidden', height: 500}} ref={chatBox}>
-                                    {
-                                        Store.chat.conversations.length === 0
-                                        ?   <Empty icon={Message} title={<>You have no messages with {name}</>} />
-                                        :   Store.chat.conversations
+                            // :   Store.chat.conversations.length === 0
+                            //     ?   <Empty icon={Message} title={<>You have no messages with {name}</>} />
+                                :   <>
+                                        <div style={{ backgroundColor: '#0177B6', borderBottom: '2px solid #eee', color: '#FFFFFF', fontWeight: '900', height: 30, padding: 30, width: '100%' }}>
+                                            {name}
+                                        </div>
+                                        <div style={{overflow: 'auto', overflowX: 'hidden', maxHeight: 500}} ref={chatBox}>
+                                        {
+                                            Store.chat.conversations
                                             .reverse()
                                             .map((convo, i) => {
                                                 const { sender: { image, name }, text, createdAt, receiver } = convo;
@@ -146,27 +134,28 @@ const Messages = () => {
                                                 lastSender = name;
                                                 return messages;
                                             })
-                                    }
-                                    </div>
-                                    <Grid container item direction="row" justify="flex-start" style={{ width: '100%' }}>
-                                        <Grid item xs={1} style={{ marginLeft: '5%' }}>
+                                            
+                                        }
+                                        </div>
+                                        <Grid container item direction="row" justify="flex-start" style={{ width: '100%' }}>
+                                            <Grid item xs={1} style={{ marginLeft: '5%' }}>
+                                            </Grid>
+                                            <Grid item xs={8} style={{ border: '1px solid #67ADD3', borderRadius: 15, marginBottom: 10, marginLeft: '5%', marginTop: 0, position: 'relative' }}>
+                                                <InputBase
+                                                    placeholder="What do you want to buy?"
+                                                    style={{ color: '#67ADD3', fontSize: 15, padding: 10, width: 'calc(100% - 25px)' }}
+                                                    value={message}
+                                                    onChange={e => setMessage(e.target.value)}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter') {
+                                                            send();
+                                                        }
+                                                    }}
+                                                />
+                                                <Send style={{ position: 'absolute', right: 10, top: 13, width: 21, cursor: 'pointer' }} onClick={send} />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item md={8} xs={11} style={{ border: '1px solid #67ADD3', borderRadius: 15, marginBottom: 10, marginLeft: '5%', marginTop: 0, position: 'relative' }}>
-                                            <InputBase
-                                                placeholder="What do you want to buy?"
-                                                style={{ color: '#67ADD3', fontSize: 15, padding: 10, width: 'calc(100% - 25px)' }}
-                                                value={message}
-                                                onChange={e => setMessage(e.target.value)}
-                                                onKeyDown={e => {
-                                                    if (e.key === 'Enter') {
-                                                        send();
-                                                    }
-                                                }}
-                                            />
-                                            <Send style={{ position: 'absolute', right: 10, top: 13, width: 21, cursor: 'pointer' }} onClick={send} />
-                                        </Grid>
-                                    </Grid>
-                                </>
+                                    </>
                         }
                     </Paper>
                 </Grid>
@@ -207,8 +196,8 @@ Messages.Photo = ({ image }) => (
 );
 
 
-Messages.User = ({ name, image, text, read, /*sender,*/ date, id, refProduct }) => (
-    <Link to={{pathname: '/message/' + id, state: { refProduct }}} 
+Messages.User = ({ name, image, text, read, /*sender,*/ date, conversation, refProduct }) => (
+    <Link to={{pathname: '/message/' + conversation, state: { refProduct }}} 
         style={{textDecoration: 'none', borderBottom: '1px solid #D6E9F3', height: 100, padding: 15, textDecoration: 'none', justifyContent: 'space-around', display: 'flex', width: '100%', boxSizing: 'border-box'}}
     >
         <Grid item xs={3}>

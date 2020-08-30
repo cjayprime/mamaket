@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, GridList, GridListTile, GridListTileBar, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,20 +25,22 @@ const useGridListTileBarStyles = makeStyles(() => ({
     },
 }));
 const locationStyles = { alignItems: 'center', color: '#FFF', display: 'flex', fontSize: 12, fontWeight: 'bold', height: 'auto', left: 3, position: 'absolute', zIndex: 1000000 };
-const bookmarkStyles = {position: 'absolute', right: 3};
+const bookmarkStyles = {position: 'absolute', right: 5, zIndex: 10000};
 const ProductCatalogue = ({ products }) => {
     const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
     const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
     const gridListTileBarClasses = useGridListTileBarStyles();
     const [bookmarks, setBookmarks] = useState([]);
-    const load = () => {
+    const load = useCallback(() => {
         Store.product.bookmark.get((result) => {
-            setBookmarks(result);
+            if(result){
+                setBookmarks(result);
+            }
         });
-    };
-    useEffect(load, [Store.product.bookmark.get]);
+    });
+    useEffect(() => load(), [Store.product.bookmark.get]);
     const prod = products//.concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products).concat(products)
-    const style = prod.length > 3 ? null : {width: 230, padding: 8};
+    const style = prod.length > 3 ? null : {width: 230, padding: 8, position: 'relative'};
     return (
         <Grid container style={{ backgroundColor: '#DDDEE0', padding: matchesXS || matchesSM ? 10 : 0 }}>
             <GridList cols={matchesXS ? 2 : matchesSM ? 3 : 5} spacing={10} cellHeight={220}>
@@ -53,7 +55,6 @@ const ProductCatalogue = ({ products }) => {
                         
                         return (
                             <GridListTile key={i} cols={1} style={style}>
-                                <Link to={'/product/' + props._id}>
                                     {
                                         props.sellerId.region &&
                                         <div style={locationStyles}>
@@ -73,13 +74,14 @@ const ProductCatalogue = ({ products }) => {
                                             />
                                         </div>
                                     }
-                                    <img src={props.images[0]} alt={props.name} />
-                                    <GridListTileBar
-                                        title={props.name}
-                                        subtitle={<>{'\u20A6'}{props.price}</>}
-                                        classes={gridListTileBarClasses}
-                                    />
-                                </Link>
+                                    <img src={props.images[0]} alt={props.name} style={{width: '100%'}} />
+                                    <Link to={'/product/' + props._id}>
+                                        <GridListTileBar
+                                            title={props.name}
+                                            subtitle={<>{'\u20A6'}{props.price}</>}
+                                            classes={gridListTileBarClasses}
+                                        />
+                                    </Link>
                             </GridListTile>
                         )
                     })
