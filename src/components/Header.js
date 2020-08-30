@@ -75,12 +75,6 @@ const Header = () => {
                                 </Link>
                             </>
                         :   <>
-                                <Link to='https://play.google.com' style={{textDecoration: 'none', color: '#FFF'}}>
-                                    <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
-                                        Become a seller
-                                    </span>
-                                </Link>
-                                <span style={{margin: 15}}>|</span>
                                 <IconButton aria-label={"Show " + Store.chat.total + " new mails"} color="inherit">
                                     <Link to='/message' style={{textDecoration: 'none', color: '#FFF'}}>
                                     <Badge badgeContent={parseInt(Store.chat.total)} color="secondary">

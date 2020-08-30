@@ -71,6 +71,13 @@ const Home = () => {
                         <Search />
                     </IconButton>
                 </Box>
+                <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                    <Link to='https://play.google.com' style={{textDecoration: 'none', color: '#FFF'}}>
+                        <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
+                            Become a seller
+                        </span>
+                    </Link>
+                </div>
             </Paper>
 
             <div style={{ marginLeft: matchesMD ? '2.5%' : 0, overflow: 'hidden', width: matchesMD ? '95%' : '100%' }}>
