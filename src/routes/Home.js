@@ -65,7 +65,7 @@ const Home = () => {
                     <Box ref={hashSearchBox} id="hash-search-box" display="flex" justifyContent="center" alignItems="center" style={{ backgroundColor: "#FFF", borderRadius: '7px 0 0 7px', color: '#2DC7FF', fontSize: 20, height: 50, paddingLeft: 30, width: 10 }}>
                         <span style={{ marginTop: -3 }}>#</span>
                     </Box>
-                    <InputBase classes={inputClasses} placeholder="What do you want to buy?" style={{ width: matchesXS ? '70%' : '35%' }} />
+                    <InputBase classes={inputClasses} placeholder="What do you want?" style={{ width: matchesXS ? '70%' : '35%' }} />
                     {/* <div id="search-box" style={{position: 'absolute', height: 50, width: 200, background: 'red', left: 0}}></div> */}
                     <IconButton style={{ backgroundColor: '#2DC7FF', borderRadius: '0 7px 7px 0', color: '#FFF', height: 50, padding: 20, width: 55 }}>
                         <Search />
