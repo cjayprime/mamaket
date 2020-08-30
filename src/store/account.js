@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+
 import { BaseStore } from './base';
 
 import Helper from '../helper';
@@ -14,6 +16,8 @@ class Account extends BaseStore {
     confirmed = false;
 
     role = '';
+
+    image = '';
 
     signout = () => {
         this.storage.remove('TOKEN');
@@ -45,8 +49,35 @@ class Account extends BaseStore {
         });
     };
 
+    upload = (formData, callback) => {
+        const { success, error } = Helper.notification;
+        fetch('https://api.cloudinary.com/v1_1/mamarket/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(async (response) => {
+            const res = await response.json();
+            if(res.secure_url){
+                callback(res.secure_url);
+                success('Image uploaded successfully.');
+            }else{
+                error(res.error.message);
+            }
+        })
+        .catch(() => {
+            error('An error occured with the request.');
+        });
+    };
+
     user = {
-        current: callback => {
+        update: data => {
+            this.api('/profile', 'PUT', data, (result, status) => {
+                if(status){
+                    this.user.current();
+                }
+            });
+        },
+        current: () => {
             this.api('/profile', 'GET', null, (result, status) => {
                 if(status){
                     this.id = result._id;
@@ -54,17 +85,19 @@ class Account extends BaseStore {
                     this.mobile = result.phoneNumber;
                     this.email = result.email;
                     this.confirmed = result.confirmed;
-                    // callback(this.id);
+                    this.image = result.image;
+                    this.role = result.role;
                 }else{
                     // If request fails test the token validity, and go to log in if invalid
-                    // try{
-                    //     const decoded = jwtDecode(token);
-                    //     if(decoded && decoded.exp * 1000 < new Date().getTime()){
-                    //         Helper.error('Your session has expired, sign in again');
-                    //         window.location = 'signin';
-                    //         return;
-                    //     }
-                    // }catch{}
+                    try{
+                        const token = this.storage.get('TOKEN');
+                        const decoded = jwtDecode(token);
+                        if(decoded && decoded.exp * 1000 < new Date().getTime()){
+                            Helper.error('Your session has expired, sign in again');
+                            window.location = '/signin';
+                            return;
+                        }
+                    }catch{}
                 }
             });
         },

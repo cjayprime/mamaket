@@ -9,8 +9,9 @@ const Product = ({ id, images, name, description, price }) => {
     const [bookmarks, setBookmarks] = useState([]);
     const load = () => {
         Store.product.bookmark.get((result) => {
-            if(result)
-            setBookmarks(result);
+            if(result){
+                setBookmarks(result);
+            }
         });
     };
     useEffect(load, [Store.product.bookmark.get]);

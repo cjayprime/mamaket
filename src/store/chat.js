@@ -39,13 +39,9 @@ class Chat extends BaseStore {
         return createdAt;
     };
 
-    init = () => {
-        this.api('/chat/init-conversation', 'GET', null, (result, status) => {
-            // console.log(result, status)
-            if(status){
-            }
-        });
-    };
+    // init = (sellerID, callback) => {
+    //     this.api('/chat/init-conversation?productId=5efa4cec3550fa0adb038217&sellerId=' + sellerID, 'GET', null, callback);
+    // };
 
     count = () => {
         this.api('/chat/unread-count', 'GET', null, (result, status) => {
@@ -63,11 +59,10 @@ class Chat extends BaseStore {
         });
     };
 
-    thread = (conversationID, callback) => {
+    thread = (conversationID) => {
         this.api('/chat/load-messages?conversation=' + conversationID, 'GET', null, (result, status) => {
             if(status){
                 this.conversations = result;
-                callback(result);
             }
         });
     };
@@ -75,7 +70,6 @@ class Chat extends BaseStore {
     socket;
 
     start = () => {
-        // this.init();
         this.socket = io(this.url, {
             transports: ['websocket'],
             query: { user: Account.id }

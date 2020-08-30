@@ -5,7 +5,8 @@ class Product extends BaseStore {
         sponsored: [],
         seller: [],
         trends: [],
-        categories: []
+        categories: [],
+        bookmarks: []
     };
 
     images = [];
@@ -40,10 +41,13 @@ class Product extends BaseStore {
         });
     };
 
-    seller = id => {
+    seller = (id, callback) => {
         this.api('/product/seller/' + id, 'GET', null, (result, status) => {
             if(status){
                 this.list.seller = result;
+                if(callback){
+                    callback(result, status);
+                }
             }
         });
     };
@@ -64,11 +68,23 @@ class Product extends BaseStore {
         });
     };
 
+    byCategory = categoryID => {
+        this.api('/product?categoryId=' + categoryID, 'GET', null, (result, status) => {
+            console.log(result, status)
+            if(status){
+                this.list.seller = result;
+            }
+        });
+    };
+
     bookmark = {
         get: callback => {
             this.api('/product/bookmarked', 'GET', null, (result, status) => {
                 if(status){
-                    callback(result);
+                    this.list.bookmarks = result;
+                    if(callback){
+                        callback(result);
+                    }
                 }
             });
         },

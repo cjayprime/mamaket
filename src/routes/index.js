@@ -1,6 +1,6 @@
-import React, { lazy, Component, Suspense } from "react";
+import React, { Component, Suspense } from "react";
 import { CircularProgress } from '@material-ui/core';
-import { observer, useObserver } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { BrowserRouter , Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 

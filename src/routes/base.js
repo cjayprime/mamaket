@@ -1,5 +1,3 @@
-import { lazy } from 'react';
-
 // Public route components
 // Note: Code spliting cannot work here!
 // Cause I wrap these components in a call
@@ -10,6 +8,7 @@ import Signup from './Signup';
 import CurrentUser from './Profile/CurrentUser';
 import OtherUsers from './Profile/OtherUsers';
 import Product from './Product';
+import ProductCategory from './Product/Category';
 import Messages from './Messages';
 
 const BaseRoutes = {
@@ -32,7 +31,7 @@ const BaseRoutes = {
         {
             component: Messages,
             exact: true,
-            path: "/message/:conversationID",
+            path: "/message/:sellerID",
         },
     ],
     public: [
@@ -55,6 +54,11 @@ const BaseRoutes = {
             component: Product,
             exact: true,
             path: "/product/:productID",
+        },
+        {
+            component: ProductCategory,
+            exact: true,
+            path: "/product",
         },
     ],
 };
