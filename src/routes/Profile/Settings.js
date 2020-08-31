@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Mail, Settings } from '@material-ui/icons';
+import { Image, Mail, Settings as SettingsIcon } from '@material-ui/icons';
 
-import { PrivatePages, ProductCatalogue, Empty } from '../../components';
+import ContactDetails from './ContactDetails';
+import ChangePassword from './ChangePassword';
+
+import { PrivatePages } from '../../components';
 
 import Store from '../../store';
 
-
-const CurrentUser = () => {
+const Settings = () => {
     const [rating, setRating] = useState(-1);
     const [ratingID, setRatingID] = useState(0);
     const [tabs, setTabs] = useState([
@@ -15,7 +17,6 @@ const CurrentUser = () => {
     const load = () => {
         const id = Store.account.id;
         if(id){
-            Store.product.bookmark.get();
             Store.account.rate.get(true, id, (rate, _id) => {
                 setRating(rate);
                 setRatingID(_id);
@@ -23,12 +24,9 @@ const CurrentUser = () => {
         }
         if(Store.account.role === 'seller'){
             setTabs([
-                { component: () => {
-                    if(Store.product.list.bookmarks.length === 0) return <Empty title={<>There are no bookmarked products to display.</>} />
-                    return <ProductCatalogue products={Store.product.list.bookmarks} />
-                }, icon: Image, title: 'Bookmarks' },
+                { component: () => <><ContactDetails/><ChangePassword/></>, icon: SettingsIcon, title: 'Settings' },
                 { icon: Mail, link: '/message', title: 'Inbox' },
-                { icon: Settings, link: '/settings', title: 'Settings' },
+                { icon: Image, link: '/profile', title: 'Profile' },
             ]);
         }
     };
@@ -49,6 +47,6 @@ const CurrentUser = () => {
             editImage={true}
         />
     );
-}
+};
 
-export default CurrentUser;
+export default Settings;

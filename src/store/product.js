@@ -97,6 +97,15 @@ class Product extends BaseStore {
             });
         }
     };
+
+    search = (query, callback) => {
+        this.api('/product/search/' + query, 'PUT', null, (result, status) => {
+            console.log(result, status)
+            // if(status){
+            //     callback(result);
+            // }
+        });
+    };
 }
 
 const store = new Product();
