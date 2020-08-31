@@ -49,6 +49,18 @@ class Account extends BaseStore {
         });
     };
 
+    changePassword = data => {
+        this.api('/auth/change-password', 'POST', {
+            oldPassword: data.oldPassword,
+            newPassword: data.newPassword
+        }, (result, status) => {
+            console.log(result, status)
+            if(status){
+                Helper.notification.success('Successfully chnaged your password');
+            }
+        });
+    };
+
     upload = (formData, callback) => {
         const { success, error } = Helper.notification;
         fetch('https://api.cloudinary.com/v1_1/mamarket/upload', {
@@ -71,9 +83,17 @@ class Account extends BaseStore {
 
     user = {
         update: data => {
+            const { success, error } = Helper.notification;
             this.api('/profile', 'PUT', data, (result, status) => {
+                console.log(result, status)
                 if(status){
                     this.user.current();
+                    success('Sucessfully updated your profile.');
+                }else{
+                    error(
+                        'Failed to update your profile:\n' + 
+                        (result.message && result.message.length ? result.message.join('\n') : '')
+                    );
                 }
             });
         },

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Paper, Grid, Box, InputBase, IconButton, GridList, GridListTile, GridListTileBar, useMediaQuery, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronRight, Search } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 import { Layout, ProductCatalogue } from '../components';
 
@@ -45,6 +46,8 @@ const ladyInYellowStyle = {
     zIndex: 5000,
 };
 const Home = () => {
+    const [query, setQuery] = useState('');
+    const history = useHistory('');
     const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs', 'sm'));
     const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm', 'md'));
     const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
@@ -65,18 +68,18 @@ const Home = () => {
                     <Box ref={hashSearchBox} id="hash-search-box" display="flex" justifyContent="center" alignItems="center" style={{ backgroundColor: "#FFF", borderRadius: '7px 0 0 7px', color: '#2DC7FF', fontSize: 20, height: 50, paddingLeft: 30, width: 10 }}>
                         <span style={{ marginTop: -3 }}>#</span>
                     </Box>
-                    <InputBase classes={inputClasses} placeholder="What do you want?" style={{ width: matchesXS ? '70%' : '35%' }} />
+                    <InputBase value={query} onChange={e => setQuery(e.target.value)} classes={inputClasses} placeholder="What do you want?" style={{ width: matchesXS ? '70%' : '35%' }} />
                     {/* <div id="search-box" style={{position: 'absolute', height: 50, width: 200, background: 'red', left: 0}}></div> */}
-                    <IconButton style={{ backgroundColor: '#2DC7FF', borderRadius: '0 7px 7px 0', color: '#FFF', height: 50, padding: 20, width: 55 }}>
+                    <IconButton style={{ backgroundColor: '#2DC7FF', borderRadius: '0 7px 7px 0', color: '#FFF', height: 50, padding: 20, width: 55 }} onClick={() => history.push('/product?search=' + query)}>
                         <Search />
                     </IconButton>
                 </Box>
                 <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                    <Link to='https://play.google.com' style={{textDecoration: 'none', color: '#FFF'}}>
+                    <a href='https://play.google.com' style={{textDecoration: 'none', color: '#FFF'}} alt="Become a seller">
                         <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
                             Become a seller
                         </span>
-                    </Link>
+                    </a>
                 </div>
             </Paper>
 

@@ -1,12 +1,13 @@
 // Public route components
 // Note: Code spliting cannot work here!
 // Cause I wrap these components in a call
-// to mobx-react observer
+// to `mobx-react`'s observer
 import Home from './Home';
 import Signin from './Signin';
 import Signup from './Signup';
 import CurrentUser from './Profile/CurrentUser';
 import OtherUsers from './Profile/OtherUsers';
+import Settings from './Profile/Settings';
 import Product from './Product';
 import ProductCategory from './Product/Category';
 import Messages from './Messages';
@@ -22,6 +23,11 @@ const BaseRoutes = {
             component: OtherUsers,
             exact: true,
             path: "/profile/:userID",
+        },
+        {
+            component: Settings,
+            exact: true,
+            path: "/settings",
         },
         {
             component: Messages,

@@ -51,11 +51,8 @@ const Signin = props => {
                         Sign In
                     </Grid>
                     <Input type='email' placeholder='Email' name='email' width={width} value={data.email} onChange={change} />
-
                     <Input type='password' placeholder='Password' name='password' width={width} value={data.password} onChange={change} />
-
                     <Signin.AccountStatus label='Forgot Password?' link={{ label: 'Click here', url: '/forgot' }} />
-                    
                     <Button
                         loading={loading}
                         onClick={submit}
@@ -65,9 +62,7 @@ const Signin = props => {
                     >
                         Sign In
                     </Button>
-
                 </Paper>
-            
                 <Signin.AccountStatus label="Don't have an account?" link={{ label: 'Register here', url: '/signup' }} />
             </Box>
         </Layout>
