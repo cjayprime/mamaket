@@ -99,11 +99,12 @@ class Product extends BaseStore {
     };
 
     search = (query, callback) => {
-        this.api('/product/search/' + query, 'PUT', null, (result, status) => {
+        this.api('/product/search/' + query, 'GET', null, (result, status) => {
             console.log(result, status)
-            // if(status){
-            //     callback(result);
-            // }
+            if(status){
+                this.list.seller = result;
+                callback(result);
+            }
         });
     };
 }
