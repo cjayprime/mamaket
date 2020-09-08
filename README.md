@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/fa20f28f-56cb-4a53-a677-a0f7895c0bad/deploy-status)](https://app.netlify.com/sites/mamaket/deploys)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -57,7 +57,7 @@ const Footer = () => {
                         </Grid>
                     }
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
-                        <div>About us</div>
+                        <a href="https://mamaketng.blogspot.com">Blog</a>
                         <div>About Mamaket</div>
                         <div>Terms & Conditions</div>
                         <div>Privacy Policy</div>
