@@ -69,9 +69,9 @@ const PrivatePages = props => {
                             <div style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 25, fontWeight: 'bold' }}>
                                 {name}
                             </div>
-                            <div style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 18 }}>
+                            {/* <div style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 18 }}>
                                 {mobile}
-                            </div>
+                            </div> */}
                             <Grid item style={{ margin: 10 }}>
                                 <Rating userID={userID} rating={rating} ratingID={ratingID} refresh={refresh} />
                             </Grid>
