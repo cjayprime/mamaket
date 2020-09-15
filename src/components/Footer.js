@@ -48,7 +48,7 @@ const Footer = () => {
                 })()
             }
             {
-                (!matchesXS || matchesXS && open) &&
+                (!matchesXS || (matchesXS && open)) &&
                 <Grid container justify="center" alignItems="center" style={container}>
                     {
                         !matchesXS &&
@@ -58,7 +58,7 @@ const Footer = () => {
                     }
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
                         <a href="https://mamaketng.blogspot.com" style={{textDecoration: 'none', color: '#FFF'}}>Blog</a>
-                        <div>About Mamaket</div>
+                        <a href="https://mamaketng.blogspot.com/2020/09/about-mamaket.html" style={{textDecoration: 'none', color: '#FFF'}}>About Mamaket</a>
                         <div>Terms & Conditions</div>
                         <div>Privacy Policy</div>
                         <div>Become a seller</div>

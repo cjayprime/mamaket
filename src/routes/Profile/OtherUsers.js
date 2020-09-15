@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Mail, PhotoLibrary } from '@material-ui/icons';
 
 import { PrivatePages, ProductCatalogue, Empty } from '../../components';
@@ -7,9 +7,7 @@ import { PrivatePages, ProductCatalogue, Empty } from '../../components';
 import Store from '../../store';
 
 const OtherUsers = () => {
-    const history = useHistory();
     const { userID } = useParams();
-    const [conversationID, setConversationID] = useState(0);
     const [name, setName] = useState('');
     const [mobile, setMobile] = useState('');
     const [image, setImage] = useState('');

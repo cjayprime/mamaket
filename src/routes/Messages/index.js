@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Grid, InputBase, Paper, useMediaQuery } from '@material-ui/core';
-import { Send, Message } from '@material-ui/icons';
+import { Grid, InputBase, Paper, useMediaQuery, Modal, Backdrop } from '@material-ui/core';
+import { Send, Message, Info } from '@material-ui/icons';
 
 import { Layout, Empty } from '../../components';
 
@@ -16,6 +17,7 @@ const Messages = () => {
     // const matchesMD = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
     const chatBox = useRef();
     const { sellerID } = useParams();
+    const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const [image, setImage] = useState('');
     const [id, setID] = useState('');
@@ -60,6 +62,7 @@ const Messages = () => {
                     setImage(image);
                     setID(_id);
                 }
+                return null;
             });
             if(!conversationID){
                 Store.account.user.other(sellerID, (result, status) => {
@@ -74,6 +77,7 @@ const Messages = () => {
         return () => Store.chat.socket && Store.chat.socket.disconnect();
     }, [Store.account.id, Store.chat.messages]);
     return (
+        <>
         <Layout background="#EBECED">
             <Grid container spacing={matchesSM || matchesXS ? 0 : 10} justify="space-evenly" style={{ marginBottom: 0, marginLeft: '5%', marginTop: 100, width: '90%' }}>
                 <Grid container item xs={12} sm={12} md={3} direction="column" alignItems="flex-start" style={{ backgroundColor: '#FFF', color: '#0177B6', display: 'flex', fontFamily: 'Quicksand',  background: 'transparent', width: '100%', overflowX: 'hidden', overflowY: 'auto', padding: 0 }}>
@@ -85,7 +89,7 @@ const Messages = () => {
                             Store.chat.messages
                             .reverse()
                             .map((message, i) => {
-                                const { participants, latestMessage: { text, read, /*sender,*/ createdAt, conversation }, refProduct } = message;
+                                const { participants, latestMessage: { text, read, /*sender, conversation,*/ createdAt }, refProduct } = message;
                                 let index = 0;
                                 if(participants[0]._id === Store.account.id){
                                     index = 1;
@@ -109,7 +113,7 @@ const Messages = () => {
                     </Paper>
                 </Grid>
                 <Grid container item xs={12} sm={12} md={9} style={{ marginTop: matchesSM || matchesXS ? 50 : 0, height: 'auto', paddingBottom: 0, paddingTop: 0 }}>
-                    <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, overflow: 'hidden', overflowY: 'auto', paddingBottom: 0, paddingTop: 0, width: '100%', zIndex: 10000/*, marginBottom: 0, maxHeight: 550*/ }}>
+                    <Paper style={{ color: '#3492C5', fontFamily: 'Quicksand', fontSize: 20, overflow: 'hidden', overflowY: 'auto', paddingBottom: 0, paddingTop: 0, width: '100%', zIndex: 1000/*, marginBottom: 0, maxHeight: 550*/ }}>
                         {
                             !sellerID
                             ?   <Empty icon={Message} title={<>You haven't selected a seller to message.</>} />
@@ -117,6 +121,7 @@ const Messages = () => {
                                     <div style={{ backgroundColor: '#0177B6', borderBottom: '2px solid #eee', color: '#FFFFFF', fontWeight: '900', height: 30, padding: 30, width: '100%' }}>
                                         {name}
                                     </div>
+                                    <div style={{background: '#E4EFF5', color: '#000', fontSize: 12, textAlign: 'center', padding: 5, paddingLeft: 30, cursor: 'pointer'}} onClick={() => setOpen(true)}>Chat Security Tips</div>
                                     <div style={{overflow: 'auto', overflowX: 'hidden', height: 500}} ref={chatBox}>
                                     {
                                         Store.chat.conversations.length === 0
@@ -172,6 +177,25 @@ const Messages = () => {
                 </Grid>
             </Grid>
         </Layout>
+        <Modal open={open} onClose={() => setOpen(false)} BackdropComponent={Backdrop}>
+            <div style={{background: '#FFF', width: matchesXS || matchesSM ? '80%' : '40%', left: matchesXS || matchesSM ? '10%' : '30%', height: matchesXS || matchesSM ? '90%' : '60%', top: matchesXS || matchesSM ? '5%' : '20%', zIndex: 100000, position: 'absolute', overflow: 'auto', overflowX: 'hidden'}}>
+                <div style={{width: '100%', marginLeft: 20, marginTop: 20}}>
+                    <Info style={{color: '#0177B6'}} />
+                </div>
+                <ol style={{margin: 30}}>
+                    <li>Never share confidential information with another user (i.e. passwords, banking information). Check out our blog for ways to stay protected online.</li>
+                    <li>Don't share your phone number. Chat through the Mamaket app! Follow our tips for messaging.</li>
+                    <li>Research the person, product, and place before accepting to pay.</li>
+                    <div>. Check out the other person's profile especially the review section. What do others say about them?</div>
+                    <div>. Look at the item photos. Do they give you enough detail?</div>
+                    <div>. Pick a safe place during a busy time of day especially the public area like malls or bus stops. Never send your home address for meetup.</div>
+
+                    <div style={{marginTop: 30}}>Use the built-in meetup feature to find Community MeetUp Spots. Always buy and sell in well-lit, monitored, public locations.</div>
+                    <div style={{marginTop: 30, marginBottom: 30,}}>Before or After: Let us know if there's a problem with a person or an item.</div>
+                </ol>
+            </div>
+        </Modal>
+        </>
     );
 };
 
@@ -208,8 +232,8 @@ Messages.Photo = ({ image }) => (
 
 
 Messages.User = ({ name, image, text, read, /*sender,*/ date, id, refProduct }) => (
-    <Link to={{pathname: '/message/' + id, state: { refProduct }}} 
-        style={{textDecoration: 'none', borderBottom: '1px solid #D6E9F3', height: 100, padding: 15, textDecoration: 'none', justifyContent: 'space-around', display: 'flex', width: '100%', boxSizing: 'border-box'}}
+    <Link to={{pathname: '/message/' + id, state: { refProduct }}}
+        style={{textDecoration: 'none', borderBottom: '1px solid #D6E9F3', height: 100, padding: 15, justifyContent: 'space-around', display: 'flex', width: '100%', boxSizing: 'border-box'}}
     >
         <Grid item xs={3}>
             <Messages.Photo image={image} />
