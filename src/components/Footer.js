@@ -59,8 +59,8 @@ const Footer = () => {
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
                         <a href="https://mamaketng.blogspot.com" style={{textDecoration: 'none', color: '#FFF'}}>Blog</a>
                         <a href="https://mamaketng.blogspot.com/2020/09/about-mamaket.html" style={{textDecoration: 'none', color: '#FFF'}}>About Mamaket</a>
-                        <div>Terms & Conditions</div>
-                        <div>Privacy Policy</div>
+                        <a href="https://mamaketng.blogspot.com/2020/12/privacy-policy.html" style={{textDecoration: 'none', color: '#FFF'}}>Terms & Conditions</a>
+                        <a href="https://mamaketng.blogspot.com/2020/12/terms-of-use.html" style={{textDecoration: 'none', color: '#FFF'}}>Privacy Policy</a>
                         <div>Become a seller</div>
                     </Grid>
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
