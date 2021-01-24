@@ -4,7 +4,7 @@ import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
 
 import footer from '../assets/images/logo/footer.png';
 import header from '../assets/images/logo/header.png';
-import appStore from '../assets/images/home/appStore.png';
+import androidStore from '../assets/images/home/androidStore.png';
 
 import Style from '../assets/styles';
 
@@ -57,23 +57,25 @@ const Footer = () => {
                         </Grid>
                     }
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
-                        <a href="https://mamaketng.blogspot.com" style={{textDecoration: 'none', color: '#FFF'}}>Blog</a>
-                        <a href="https://mamaketng.blogspot.com/2020/09/about-mamaket.html" style={{textDecoration: 'none', color: '#FFF'}}>About Mamaket</a>
-                        <a href="https://mamaketng.blogspot.com/2020/12/privacy-policy.html" style={{textDecoration: 'none', color: '#FFF'}}>Terms & Conditions</a>
-                        <a href="https://mamaketng.blogspot.com/2020/12/terms-of-use.html" style={{textDecoration: 'none', color: '#FFF'}}>Privacy Policy</a>
-                        <div>Become a seller</div>
+                        <a href="https://mamaketng.blogspot.com"  style={Style.footer.text}>Blog</a>
+                        <a href="https://mamaketng.blogspot.com/2020/09/about-mamaket.html" style={Style.footer.text}>About Mamaket</a>
+                        <a href="https://mamaketng.blogspot.com/2020/12/privacy-policy.html" style={Style.footer.text}>Terms & Conditions</a>
+                        <a href="https://mamaketng.blogspot.com/2020/12/terms-of-use.html" style={Style.footer.text}>Privacy Policy</a>
+                        <a href="https://www.instagram.com/mamaketblu" style={Style.footer.text}>Instagram</a>
+                        <a href="https://www.facebook.com/mamaket9ja" style={Style.footer.text}>Facebook</a>
                     </Grid>
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
-                        <div>Support</div>
-                        <div>Email</div>
-                        <div>Safety Tips</div>
-                        <div>Contact Us</div>
-                        <div>FAQ</div>
+                        <div style={Style.footer.text}>Safety Tips</div>
+                        <a style={Style.footer.text} href="mailto:unru@mamaketblu.org">Contact Us</a>
+                        <a style={Style.footer.text} href="https://twitter.com/mamaketn">Twitter</a>
+                        <a style={Style.footer.text} href="https://wa.me/23480375645421">Whatsapp</a>
                     </Grid>
                     <Grid container item xs={12} sm={12} md={3} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
-                        <div>Our Apps</div>
-                        <div>Download now</div>
-                        <img src={appStore} alt="App Store" />
+                        <div style={Style.footer.text}>Our Apps</div>
+                        <div style={Style.footer.text}>Download now</div>
+                        <a style={Style.footer.text} href="https://play.google.com/store/apps/details?id=com.mamaket.app">
+                            <img src={androidStore} style={{width: 170, height: 50}} alt="App Store" />
+                        </a>
                     </Grid>
                 </Grid>
             }

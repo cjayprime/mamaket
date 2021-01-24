@@ -75,7 +75,7 @@ const Home = () => {
                     </IconButton>
                 </Box>
                 <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                    <a href='https://play.google.com' style={{textDecoration: 'none', color: '#FFF'}} alt="Become a seller">
+                    <a href='https://play.google.com/store/apps/details?id=com.mamaket.app' style={{textDecoration: 'none', color: '#FFF'}} alt="Become a seller">
                         <span style={{backgroundColor: '#2DC7FF', padding: 10, borderRadius: 25, fontSize: 14, cursor: 'pointer'}}>
                             Become a seller
                         </span>
