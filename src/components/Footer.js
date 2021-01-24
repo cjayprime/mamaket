@@ -62,13 +62,13 @@ const Footer = () => {
                         <a href="https://mamaketng.blogspot.com/2020/12/privacy-policy.html" style={Style.footer.text}>Terms & Conditions</a>
                         <a href="https://mamaketng.blogspot.com/2020/12/terms-of-use.html" style={Style.footer.text}>Privacy Policy</a>
                         <a href="https://www.instagram.com/mamaketblu" style={Style.footer.text}>Instagram</a>
-                        <a href="https://www.facebook.com/mamaket9ja" style={Style.footer.text}>Facebook</a>
                     </Grid>
                     <Grid container item xs={12} sm={12} md={2} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
                         <div style={Style.footer.text}>Safety Tips</div>
                         <a style={Style.footer.text} href="mailto:unru@mamaketblu.org">Contact Us</a>
                         <a style={Style.footer.text} href="https://twitter.com/mamaketn">Twitter</a>
                         <a style={Style.footer.text} href="https://wa.me/23480375645421">Whatsapp</a>
+                        <a href="https://www.facebook.com/mamaket9ja" style={Style.footer.text}>Facebook</a>
                     </Grid>
                     <Grid container item xs={12} sm={12} md={3} direction="column" justify="space-between" alignItems="center" style={Style.footer.section}>
                         <div style={Style.footer.text}>Our Apps</div>
